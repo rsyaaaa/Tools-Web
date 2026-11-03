@@ -1,4 +1,4 @@
-export type ActiveTool = 'home' | 'compressor' | 'photobooth';
+export type ActiveTool = 'home' | 'compressor' | 'photobooth' | 'converter';
 
 export type CameraStatus = 'inactive' | 'ready' | 'streaming' | 'permission-denied' | 'unsupported';
 
@@ -78,3 +78,40 @@ export interface StripConfig {
   borderWidth: number;
 }
 
+// --- Image Converter Types ---
+export type ConvertTargetFormat =
+  | 'image/png'
+  | 'image/jpeg'
+  | 'image/webp'
+  | 'image/gif'
+  | 'image/bmp'
+  | 'image/tiff'
+  | 'image/x-icon'
+  | 'image/svg+xml'
+  | 'application/postscript'
+  | 'application/pdf';
+
+export interface ConvertSettings {
+  targetFormat: ConvertTargetFormat;
+  quality: number; // 0.1 to 1.0
+  backgroundColor: string; // Used when converting transparent PNG to JPEG
+}
+
+export interface ConvertTaskItem {
+  id: string;
+  file: File;
+  name: string;
+  originalSize: number;
+  originalFormat: string;
+  originalWidth: number;
+  originalHeight: number;
+  previewUrl: string;
+  targetFormat: ConvertTargetFormat;
+  quality: number;
+  backgroundColor: string;
+  status: 'pending' | 'converting' | 'completed' | 'error';
+  convertedBlob: Blob | null;
+  convertedUrl: string | null;
+  convertedSize: number | null;
+  errorMessage?: string;
+}

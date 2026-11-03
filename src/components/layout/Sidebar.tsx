@@ -3,6 +3,7 @@ import {
   Home,
   FileImage,
   Sparkles,
+  RefreshCw,
   ChevronLeft,
   ChevronRight,
   Layers,
@@ -132,13 +133,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => onSelectTool('photobooth')}
             title="AI Palette Photobooth"
-            className={`w - full flex items - center rounded - md transition - all text - left ${
-    isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
-  } ${
-    activeTool === 'photobooth'
-      ? 'bg-primary text-white font-medium shadow-raised'
-      : 'text-white/70 hover:text-white hover:bg-white/10'
-  } `}
+            className={`w-full flex items-center rounded-md transition-all text-left ${
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
+            } ${
+              activeTool === 'photobooth'
+                ? 'bg-primary text-white font-medium shadow-raised'
+                : 'text-white/70 hover:text-white hover:bg-white/10'
+            }`}
           >
             <Sparkles className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && (
@@ -146,6 +147,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span className="text-xs truncate">AI Palette Photobooth</span>
                 <span className="text-[10px] text-white/60 tracking-tight">
                   K-Means Strip Studio
+                </span>
+              </div>
+            )}
+          </button>
+
+          {/* Tool 3: Image Converter */}
+          <button
+            onClick={() => onSelectTool('converter')}
+            title="Image Converter Studio"
+            className={`w-full flex items-center rounded-md transition-all text-left ${
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
+            } ${
+              activeTool === 'converter'
+                ? 'bg-primary text-white font-medium shadow-raised'
+                : 'text-white/70 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <RefreshCw className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && (
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-xs truncate">Image Converter</span>
+                <span className="text-[10px] text-white/60 tracking-tight">
+                  Multi-Format Batch
                 </span>
               </div>
             )}

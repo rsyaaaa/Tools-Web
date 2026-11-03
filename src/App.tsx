@@ -8,6 +8,7 @@ import { CameraView } from './components/photobooth/CameraView';
 import { PaletteCard } from './components/photobooth/PaletteCard';
 import { TemplateSelector } from './components/photobooth/TemplateSelector';
 import { StripPreview } from './components/photobooth/StripPreview';
+import { ConverterView } from './components/converter/ConverterView';
 import {
   ActiveTool,
   VisualEngineStatus,
@@ -408,6 +409,11 @@ export const App: React.FC = () => {
                     </div>
                   )}
                 </div>
+              )}
+
+              {/* Tool 3: Image Converter Studio */}
+              {activeTool === 'converter' && (
+                <ConverterView visualEngine={visualEngine} />
               )}
             </div>
           </main>
