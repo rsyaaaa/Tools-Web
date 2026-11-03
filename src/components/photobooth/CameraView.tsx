@@ -14,7 +14,7 @@ interface CameraViewProps {
   onPhotosCaptured: (photos: CapturedPhoto[]) => void;
   targetCount: 3 | 4;
   onTargetCountChange: (count: 3 | 4) => void;
-  onCameraStatusChange: (status: CameraStatus) => void;
+  onCameraStatusChange?: (status: CameraStatus) => void;
 }
 
 export const CameraView: React.FC<CameraViewProps> = ({
@@ -66,11 +66,11 @@ export const CameraView: React.FC<CameraViewProps> = ({
         videoRef.current.play();
       }
       setIsCameraActive(true);
-      onCameraStatusChange('streaming');
+      onCameraStatusChange?.('streaming');
     } catch (err: unknown) {
       console.warn('Camera access issue:', err);
       setIsCameraActive(false);
-      onCameraStatusChange('permission-denied');
+      onCameraStatusChange?.('permission-denied');
       setPermissionError(
         'Kamera tidak dapat diakses atau izin ditolak. Anda dapat menggunakan mode unggah foto di bawah.'
       );
@@ -87,7 +87,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
       videoRef.current.srcObject = null;
     }
     setIsCameraActive(false);
-    onCameraStatusChange('inactive');
+    onCameraStatusChange?.('inactive');
   }, [onCameraStatusChange]);
 
   useEffect(() => {

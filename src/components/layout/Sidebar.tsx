@@ -25,9 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <aside
-      className={`shell-glass border-r flex flex-col justify-between transition-all duration-200 z-40 relative select-none ${
-        isCollapsed ? 'w-16' : 'w-64'
-      }`}
+          }`}
     >
       {/* Top Branding Section */}
       <div>
@@ -50,9 +48,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {isCollapsed && (
             <div className="mx-auto">
-              <div className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised">
+              <button
+                onClick={onToggleCollapse}
+                title="Expand sidebar"
+                className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised hover:scale-105 transition-transform"
+              >
                 <Layers className="w-4 h-4 text-white" />
-              </div>
+              </button>
             </div>
           )}
 
@@ -79,11 +81,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             title="Image Compressor Studio"
             className={`w-full flex items-center rounded-md transition-all text-left ${
               isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
-            } ${
+      } ${
               activeTool === 'compressor'
-                ? 'bg-primary text-white font-medium shadow-raised'
-                : 'text-white/70 hover:text-white hover:bg-white/10'
-            }`}
+        ? 'bg-primary text-white font-medium shadow-raised'
+        : 'text-white/70 hover:text-white hover:bg-white/10'
+      }`}
           >
             <FileImage className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && (
@@ -100,13 +102,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => onSelectTool('photobooth')}
             title="AI Palette Photobooth"
-            className={`w-full flex items-center rounded-md transition-all text-left ${
-              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
-            } ${
-              activeTool === 'photobooth'
-                ? 'bg-primary text-white font-medium shadow-raised'
-                : 'text-white/70 hover:text-white hover:bg-white/10'
-            }`}
+            className={`w - full flex items - center rounded - md transition - all text - left ${
+    isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
+  } ${
+    activeTool === 'photobooth'
+      ? 'bg-primary text-white font-medium shadow-raised'
+      : 'text-white/70 hover:text-white hover:bg-white/10'
+  } `}
           >
             <Sparkles className="w-5 h-5 flex-shrink-0" />
             {!isCollapsed && (
