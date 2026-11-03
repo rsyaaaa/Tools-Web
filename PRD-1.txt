@@ -1,0 +1,135 @@
+PRD WEB TOOLS 
+
+# Product Requirement Document (PRD)
+
+## 1. Project Overview & Objective
+•  *Project Name:* GraphixLab — Client-Side Visual Utilities & Smart Photobooth
+•  *Domain:* Computer Graphics, Digital Image Processing, & Heuristic AI
+•  *Architecture:* 100% Static Single Page Application (Client-Side Only)
+•  *Access Model:* Public, Zero-Auth, No Login, No Database, Zero Server-Side Persistence
+•  *Primary Objective:* Menyediakan web utilitas grafis terintegrasi yang mengeksekusi kompresi citra dan photobooth strip interaktif secara real-time langsung di browser menggunakan HTML5 Canvas API dan analisis palet warna otomatis berbasis K-Means clustering.
+
+---
+
+## 2. Technical Stack & Constraints
+•  *Language:* TypeScript
+•  *Framework:* Vite + React (atau Next.js Static Export output: 'export')
+•  *Styling:* Tailwind CSS + Lucide React (Icons)
+•  *Graphics & Processing Core:* 
+  •  HTML5 Canvas 2D Context API (ImageData, drawImage, toBlob)
+  •  WebRTC API (navigator.mediaDevices.getUserMedia)
+  •  K-Means Color Quantization / ColorThief (Client-side)
+•  *Storage & Memory:* In-memory state (RAM/VRAM browser only, data hilang saat refresh/close tab)
+•  *Deployment Target:* Static Hosting (Vercel, GitHub Pages, atau Cloudflare Pages)
+
+---
+
+## 3. User Flow & Core Architecture
+1. *Entry:* Pengguna membuka web dan langsung disuguhkan layout dashboard utama tanpa splash screen login/register.
+2. *Navigation:* Sidebar navigasi memungkinkan beralih instan antara dua tools:
+   •  *Tool 1:* Image Compressor Studio
+   •  *Tool 2:* AI Palette Photobooth
+3. *Processing:* Seluruh kalkulasi matriks piksel, resize, kalkulasi warna dominan, dan compositing dilakukan di thread browser tanpa request HTTP keluar.
+4. *Export:* Hasil akhir diunduh langsung ke storage lokal perangkat pengguna via data URL / Blob.
+
+---
+
+## 4. Functional Requirements
+
+### 4.1. Dashboard Shell
+•  *Sidebar Navigation:*
+  •  Quick switch antara Image Compressor dan AI Photobooth.
+  •  Status badge: Visual Engine (Canvas 2D / Hardware Accelerated) & Camera Status (Ready / Inactive).
+•  *Main Canvas Viewport:* Container dinamis yang merender workspace aktif.
+
+---
+
+### 4.2. Tool 1: Image Compressor Studio
+•  *Input Management:*
+  •  Area drag-and-drop file atau file picker.
+  •  Menerima format: .jpg, .jpeg, .png, .webp.
+•  *Graphics Processing Engine:*
+  •  *Scale / Resize Mode:* Pilihan resize berbasis persentase (Original 100%, 75%, 50%, 25%) atau dimensi manual ($W \times H$) dengan preserve aspect ratio.
+  •  *Quantization & Compression Slider:* Rentang slider kualitas $0.1$ hingga $1.0$ (step $0.05$).
+  •  *Format Converter:* Pilihan format output (image/jpeg atau image/webp).
+•  *Visual Inspector & Metrics:*
+  •  Side-by-side / split comparison view (Original vs Compressed).
+  •  Metrik komparasi real-time:
+    •  Ukuran file asal vs ukuran file hasil kompresi (dalam KB/MB).
+    •  Persentase reduksi ukuran (contoh: -68.4%).
+    •  Dimensi resolusi piksel asal vs akhir.
+•  *Export Action:*
+  •  Tombol unduh file terkompresi dengan penamaan otomatis: [original-name]-compressed.[ext].
+
+---
+
+### 4.3. Tool 2: AI Palette Photobooth Studio
+•  *Input Capture Pipeline:*
+  •  *Live Webcam Stream:* Integrasi WebRTC dengan opsi switch front/rear camera.
+  •  *Fallback / Upload Mode:* Upload file foto langsung jika tidak memiliki webcam.
+  •  *Capture Shutter:* 
+    •  Countdown timer interaktif (3 detik) dengan countdown visual overlay.
+    •  Screen flash effect (simulasi blitz kamera pada canvas).
+    •  Multi-shot mode: Mengambil rangkaian 3 atau 4 foto berurutan dengan jeda antar shot.
+•  *AI Palette Extraction & Smart Template Matcher:*
+  •  *Pixel Sampling:* Membaca array piksel ImageData dari tangkapan foto melalui canvas buffer tersembunyi.
+  •  *K-Means Clustering:* Mengelompokkan warna ke dalam 4 centroid warna dominan.
+  •  *Tone & Mood Analyzer:*
+    •  Kalkulasi luminansi ($Y = 0.299R + 0.587G + 0.114B$) dan color temperature (rasio Red vs Blue).
+    •  Mengklasifikasikan mood foto: Warm Vintage, Moody Dark, Pastel Bright, atau Cyber Cool.
+  •  *Auto-Template Assignment:*
+    •  Sistem otomatis mengaplikasikan template warna frame strip yang paling harmonis dengan palet yang diekstrak.
+    •  Menampilkan kartu Color Swatches (kode HEX) yang terdeteksi di dashboard.
+    •  Manual Override: Pengguna tetap dapat mengganti warna frame/border secara manual melalui color picker / preset list.
+•  *Canvas Compositor (Photobooth Strip Layout):*
+  •  Merender seluruh foto ke dalam 1 kanvas strip vertikal (rasio photobooth klasik 1:3 atau 1:4).
+  •  Penambahan elemen grafis:
+    •  Border & inner padding yang konsisten.
+    •  Stempel metadata grafis: Tanggal pengambilan (monospace font) dan custom label footer.
+    •  Opsi procedural grain / noise overlay ringan pada canvas.
+•  *Export Action:*
+  •  Tombol "Download Photo Strip" (format PNG resolusi tinggi).
+  •  Tombol "Retake" untuk mereset memory canvas dan mengulang sesi foto.
+
+---
+
+## 5. Non-Functional Requirements
+•  *Privacy & Security:* 100% Client-side. Tidak ada data foto, koordinat kamera, atau buffer citra yang dikirim ke jaringan luar.
+•  *Performance:* 
+  •  Waktu ekstraksi warna dominan via K-Means di bawah 200ms (menggunakan canvas downscale 100x100 sebelum sampling).
+  •  Render strip photobooth instan tanpa blocking UI thread.
+•  *Responsiveness:* Tampilan dashboard fleksibel di layar desktop/laptop dan tetap fungsional di layar smartphone.
+•  *Zero Infrastructure Cost:* Dapat di-build menjadi aset statis murni (HTML, JS, CSS) tanpa kebutuhan runtime Node.js di server.
+
+---
+
+## 6. Project Directory Structure
+```text
+├── public/
+│   └── favicon.ico
+├── src/
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── Header.tsx
+│   │   ├── compressor/
+│   │   │   ├── Dropzone.tsx
+│   │   │   ├── CompareView.tsx
+│   │   │   └── CompressionControls.tsx
+│   │   └── photobooth/
+│   │       ├── CameraView.tsx
+│   │       ├── PaletteCard.tsx
+│   │       ├── TemplateSelector.tsx
+│   │       └── StripPreview.tsx
+│   ├── lib/
+│   │   ├── color-analyzer.ts      # K-Means clustering & mood detector
+│   │   ├── canvas-compositor.ts   # Strip renderer, text stamping, border builder
+│   │   └── image-compressor.ts    # Canvas toBlob & downscaling logic
+│   ├── types/
+│   │   └── index.ts
+│   ├── App.tsx                    # Active tool routing & state holder
+│   └── main.tsx
+├── index.html
+├── package.json
+├── tsconfig.json
+└── tailwind.config.js
