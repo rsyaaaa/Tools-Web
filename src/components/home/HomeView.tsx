@@ -4,18 +4,15 @@ import {
   Sparkles,
   RefreshCw,
   ArrowRight,
-  ShieldCheck,
-  Cpu,
   Layers,
   Sliders,
   Camera,
   CheckCircle2,
 } from 'lucide-react';
-import { ActiveTool, VisualEngineStatus } from '../../types';
+import { ActiveTool } from '../../types';
 
 interface HomeViewProps {
   onNavigate: (tool: ActiveTool) => void;
-  visualEngine: VisualEngineStatus;
 }
 
 const MOTIVATIONAL_QUOTES = [
@@ -29,7 +26,7 @@ const MOTIVATIONAL_QUOTES = [
   "Saatnya wujudkan kreasi grafis terbaikmu sekarang.",
 ];
 
-export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, visualEngine }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [fadeState, setFadeState] = useState<'in' | 'out'>('in');
 
@@ -46,37 +43,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, visualEngine }) 
   }, []);
 
   return (
-    <div className="space-y-10 py-4 max-w-5xl mx-auto">
-      {/* Top Telemetry Row */}
-      <div className="flex items-center justify-between border-b border-workspace-outline pb-4">
-        <div className="flex items-center space-x-2 text-xs font-mono text-workspace-muted">
-          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <span>GRAPHIXLAB WORKSPACE // COMMAND CENTER</span>
-        </div>
-
-        <div className="flex items-center space-x-2.5">
-          {/* Visual Engine Badge */}
-          <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft border border-workspace-outline text-workspace-foreground">
-            <Cpu className="w-3.5 h-3.5 text-primary" />
-            <span className="text-[11px] font-mono uppercase tracking-wide">
-              {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-            </span>
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-          </div>
-
-          {/* 100% Client-Side Pill */}
-          <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>100% Client-Side</span>
-          </div>
-        </div>
-      </div>
-
+    <div className="space-y-10 py-8 max-w-5xl mx-auto">
       {/* Central Hero Stage */}
-      <div className="text-center space-y-4 pt-4 pb-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary-strong text-xs font-mono font-semibold">
+      <div className="text-center space-y-4 pt-2 pb-2">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-primary-strong text-xs font-mono font-semibold">
           <Layers className="w-3.5 h-3.5" />
-          <span>VISUAL UTILITIES & SMART PHOTOBOOTH</span>
+          <span>100% Free, 100% Client Side</span>
         </div>
 
         {/* Big Central Question */}

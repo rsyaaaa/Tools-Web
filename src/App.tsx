@@ -26,7 +26,6 @@ import { Sparkles, Wand2, Cpu, ShieldCheck } from 'lucide-react';
 export const App: React.FC = () => {
   // Navigation & Shell State
   const [activeTool, setActiveTool] = useState<ActiveTool>('home');
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [visualEngine] = useState<VisualEngineStatus>('hardware-accelerated');
 
   // --- Tool 1: Image Compressor State ---
@@ -230,8 +229,6 @@ export const App: React.FC = () => {
         <Sidebar
           activeTool={activeTool}
           onSelectTool={setActiveTool}
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
 
       {/* Dynamic Canvas Workspace Viewport */}
@@ -239,7 +236,7 @@ export const App: React.FC = () => {
         <div className="max-w-[1400px] mx-auto space-y-6">
           {/* Halaman Utama / Home Launchpad */}
           {activeTool === 'home' && (
-            <HomeView onNavigate={setActiveTool} visualEngine={visualEngine} />
+            <HomeView onNavigate={setActiveTool} />
           )}
 
           {/* Tool 1: Image Compressor Studio */}
