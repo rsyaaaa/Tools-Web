@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Home,
   FileImage,
   Sparkles,
   ChevronLeft,
@@ -25,18 +26,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   return (
     <aside
-          }`}
+      className={`shell-glass border-r flex flex-col justify-between transition-all duration-200 z-40 h-full flex-shrink-0 select-none ${
+        isCollapsed ? 'w-16' : 'w-64'
+      }`}
     >
       {/* Top Branding Section */}
       <div>
         <div className="h-16 flex items-center justify-between px-3 border-b border-white/10">
           {!isCollapsed && (
-            <div className="flex items-center space-x-2.5 overflow-hidden pl-1">
-              <div className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised flex-shrink-0">
+            <div
+              onClick={() => onSelectTool('home')}
+              className="flex items-center space-x-2.5 overflow-hidden pl-1 cursor-pointer group"
+              title="GraphixLab - Kembali ke Halaman Utama"
+            >
+              <div className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised flex-shrink-0 group-hover:scale-105 transition-transform">
                 <Layers className="w-4 h-4 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-sm tracking-tight text-white leading-tight">
+                <span className="font-bold text-sm tracking-tight text-white leading-tight group-hover:text-primary-warm transition-colors">
                   GraphixLab
                 </span>
                 <span className="text-[10px] font-mono tracking-wider text-white/50 uppercase">
@@ -49,8 +56,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {isCollapsed && (
             <div className="mx-auto">
               <button
-                onClick={onToggleCollapse}
-                title="Expand sidebar"
+                onClick={() => onSelectTool('home')}
+                title="GraphixLab - Kembali ke Halaman Utama"
                 className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised hover:scale-105 transition-transform"
               >
                 <Layers className="w-4 h-4 text-white" />
@@ -74,6 +81,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
               Core Visual Modules
             </div>
           )}
+
+          {/* Home / Beranda */}
+          <button
+            onClick={() => onSelectTool('home')}
+            title="Halaman Utama"
+            className={`w-full flex items-center rounded-md transition-all text-left ${
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
+            } ${
+              activeTool === 'home'
+                ? 'bg-primary text-white font-medium shadow-raised'
+                : 'text-white/70 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <Home className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && (
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-xs truncate">Halaman Utama</span>
+                <span className="text-[10px] text-white/60 tracking-tight">
+                  Studio Launchpad
+                </span>
+              </div>
+            )}
+          </button>
 
           {/* Tool 1: Image Compressor */}
           <button

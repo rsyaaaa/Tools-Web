@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
+import { HomeView } from './components/home/HomeView';
 import { Dropzone } from './components/compressor/Dropzone';
 import { CompressionControls } from './components/compressor/CompressionControls';
 import { CompareView } from './components/compressor/CompareView';
@@ -23,7 +24,7 @@ import { Sparkles, Wand2, Cpu, ShieldCheck } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Navigation & Shell State
-  const [activeTool, setActiveTool] = useState<ActiveTool>('compressor');
+  const [activeTool, setActiveTool] = useState<ActiveTool>('home');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [visualEngine] = useState<VisualEngineStatus>('hardware-accelerated');
 
@@ -232,11 +233,16 @@ export const App: React.FC = () => {
           onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
 
-        {/* Dynamic Canvas Workspace Viewport */}
-          <main className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div className="max-w-[1400px] mx-auto space-y-6">
-              {/* Tool 1: Image Compressor Studio */}
-              {activeTool === 'compressor' && (
+      {/* Dynamic Canvas Workspace Viewport */}
+      <main className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="max-w-[1400px] mx-auto space-y-6">
+          {/* Halaman Utama / Home Launchpad */}
+          {activeTool === 'home' && (
+            <HomeView onNavigate={setActiveTool} visualEngine={visualEngine} />
+          )}
+
+          {/* Tool 1: Image Compressor Studio */}
+          {activeTool === 'compressor' && (
                 <div className="space-y-6">
                   {/* Section Header */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline pb-4">

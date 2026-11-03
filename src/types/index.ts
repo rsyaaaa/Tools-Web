@@ -1,4 +1,4 @@
-export type ActiveTool = 'compressor' | 'photobooth';
+export type ActiveTool = 'home' | 'compressor' | 'photobooth';
 
 export type CameraStatus = 'inactive' | 'ready' | 'streaming' | 'permission-denied' | 'unsupported';
 
