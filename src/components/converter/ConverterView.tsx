@@ -386,10 +386,12 @@ export const ConverterView: React.FC<ConverterViewProps> = ({ visualEngine }) =>
                 if (e.dataTransfer.files) handleFiles(e.dataTransfer.files);
               }}
               onClick={() => fileInputRef.current?.click()}
-                    ? 'border-primary bg-primary/5 scale-[1.01]'
-                    : 'border-workspace-outline hover:border-primary/60 bg-workspace-elevated'
-                  } shadow-subtle`}
-          >
+              className={`border-2 border-dashed rounded-lg p-5 sm:p-6 text-center cursor-pointer transition-all ${
+                isDragging
+                  ? 'border-primary bg-primary/5 scale-[1.01]'
+                  : 'border-workspace-outline hover:border-primary/60 bg-workspace-elevated'
+              } shadow-subtle`}
+            >
             <div className="flex flex-col items-center justify-center space-y-2.5">
               <div className="w-10 h-10 rounded-full bg-workspace-soft flex items-center justify-center text-primary">
                 <UploadCloud className="w-5 h-5 text-primary" />
