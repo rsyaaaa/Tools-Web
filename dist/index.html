@@ -6,11 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GraphixLab — Client-Side Visual Utilities & Smart Photobooth</title>
     <meta name="description" content="High performance client-side image compression, real-time comparison, and AI palette smart photobooth with K-Means clustering." />
-    <script type="module" crossorigin src="/assets/index-gfWKRsIQ.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-2gptHT1f.css">
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('graphixlab_theme') || 'light';
+          if (t === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B0JSkjX8.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Ce6sPXj2.css">
   </head>
-  <body class="bg-workspace text-workspace-foreground antialiased selection:bg-primary/20 selection:text-primary-strong">
+  <body class="bg-workspace text-workspace-foreground antialiased selection:bg-primary/20 selection:text-primary-strong transition-colors duration-200">
     <div id="root"></div>
   </body>
 </html>
-

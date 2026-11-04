@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,14 +9,22 @@ export default {
     extend: {
       colors: {
         workspace: {
-          DEFAULT: '#fcfaf7',
-          surface: '#f3f4f6',
-          soft: '#edebe9',
-          elevated: '#ffffff',
-          foreground: '#423d38',
-          muted: '#797067',
-          outline: '#e3e0dd',
-          'outline-strong': '#d1d5dc',
+          DEFAULT: 'var(--bg-workspace)',
+          surface: 'var(--bg-surface)',
+          soft: 'var(--bg-soft)',
+          elevated: 'var(--bg-elevated)',
+          foreground: 'var(--text-foreground)',
+          muted: 'var(--text-muted)',
+          outline: 'var(--border-outline)',
+          'outline-strong': 'var(--border-outline-strong)',
+          // Explicit dark mode values for backwards compatibility
+          'dark-bg': '#0a0a0c',
+          'dark-surface': '#141417',
+          'dark-soft': '#1f1f24',
+          'dark-elevated': '#131316',
+          'dark-foreground': '#ffffff',
+          'dark-muted': '#a1a1aa',
+          'dark-outline': '#27272a',
         },
         primary: {
           DEFAULT: '#fe6e00',
@@ -24,8 +33,8 @@ export default {
           focus: '#f97015',
         },
         shell: {
-          bg: 'rgba(0, 0, 0, 0.70)',
-          border: 'rgba(255, 255, 255, 0.10)',
+          bg: 'rgba(0, 0, 0, 0.75)',
+          border: 'rgba(255, 255, 255, 0.12)',
           text: '#ffffff',
           'text-muted': 'rgba(255, 255, 255, 0.65)',
         },
@@ -66,4 +75,3 @@ export default {
   },
   plugins: [],
 };
-

@@ -9,6 +9,8 @@ import { PaletteCard } from './components/photobooth/PaletteCard';
 import { TemplateSelector } from './components/photobooth/TemplateSelector';
 import { StripPreview } from './components/photobooth/StripPreview';
 import { ConverterView } from './components/converter/ConverterView';
+import { SettingsModal } from './components/settings/SettingsModal';
+import { useApp } from './context/AppContext';
 import {
   ActiveTool,
   VisualEngineStatus,
@@ -24,6 +26,8 @@ import { extractPaletteFromImage } from './lib/color-analyzer';
 import { Sparkles, Wand2, Cpu, ShieldCheck } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { t } = useApp();
+
   // Navigation & Shell State
   const [activeTool, setActiveTool] = useState<ActiveTool>('home');
   const [visualEngine] = useState<VisualEngineStatus>('hardware-accelerated');
@@ -224,12 +228,12 @@ export const App: React.FC = () => {
   };
 
   return (
-      <div className="h-screen w-full flex overflow-hidden bg-workspace text-workspace-foreground">
-        {/* Shell Dark Frosted Sidebar */}
-        <Sidebar
-          activeTool={activeTool}
-          onSelectTool={setActiveTool}
-        />
+    <div className="h-screen w-full flex overflow-hidden bg-workspace dark:bg-workspace-dark-bg text-workspace-foreground dark:text-workspace-dark-foreground transition-colors duration-200">
+      {/* Shell Dark Frosted Sidebar */}
+      <Sidebar
+        activeTool={activeTool}
+        onSelectTool={setActiveTool}
+      />
 
       {/* Dynamic Canvas Workspace Viewport */}
       <main className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8">
@@ -241,130 +245,130 @@ export const App: React.FC = () => {
 
           {/* Tool 1: Image Compressor Studio */}
           {activeTool === 'compressor' && (
-                <div className="space-y-6">
-                  {/* Section Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline pb-4">
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground">
-                        Image Compressor Studio
-                      </h2>
-                      <p className="text-xs sm:text-sm text-workspace-muted mt-0.5">
-                        Client-side lossless and quantized image optimization with real-time curtain split inspector.
-                      </p>
-                    </div>
+            <div className="space-y-6">
+              {/* Section Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground">
+                    Image Compressor Studio
+                  </h2>
+                  <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted mt-0.5">
+                    Client-side lossless and quantized image optimization with real-time curtain split inspector.
+                  </p>
+                </div>
 
-                    <div className="flex items-center flex-wrap gap-2.5">
-                      {/* Visual Engine Status Badge */}
-                      <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft border border-workspace-outline text-workspace-foreground">
-                        <Cpu className="w-3.5 h-3.5 text-primary" />
-                        <span className="text-[11px] font-mono uppercase tracking-wide">
-                          {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-                        </span>
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-                      </div>
-
-                      {/* Security / 100% Client-Side Pill */}
-                      <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>100% Client-Side</span>
-                      </div>
-
-                      {!imageMeta && (
-                        <button
-                          onClick={loadDemoCompressorImage}
-                          className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-                        >
-                          <Wand2 className="w-3.5 h-3.5" />
-                          <span>Muat Contoh Citra Uji</span>
-                        </button>
-                      )}
-                    </div>
+                <div className="flex items-center flex-wrap gap-2.5">
+                  {/* Visual Engine Status Badge */}
+                  <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft dark:bg-workspace-dark-soft border border-workspace-outline dark:border-workspace-dark-outline text-workspace-foreground dark:text-workspace-dark-foreground">
+                    <Cpu className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-[11px] font-mono uppercase tracking-wide">
+                      {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
+                    </span>
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
                   </div>
 
-                  {/* If no image selected yet, show prominent dropzone */}
-                  {!imageMeta ? (
-                    <div className="max-w-3xl mx-auto py-8">
-                      <Dropzone
-                        onImageSelected={handleImageSelected}
-                        currentImage={imageMeta}
-                      />
-                    </div>
-                  ) : (
-                    /* Active Workspace: Controls & Split View */
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                      {/* Left Column: Controls & Replace Dropzone */}
-                      <div className="lg:col-span-5 space-y-5">
-                        <CompressionControls
-                          imageMeta={imageMeta}
-                          settings={compressionSettings}
-                          result={compressionResult}
-                          isProcessing={isCompressing}
-                          onUpdateSettings={handleUpdateSettings}
-                        />
+                  {/* Security / 100% Client-Side Pill */}
+                  <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>100% Client-Side</span>
+                  </div>
 
-                        <Dropzone
-                          onImageSelected={handleImageSelected}
-                          currentImage={imageMeta}
-                        />
-                      </div>
-
-                      {/* Right Column: Interactive Compare View & Metrics */}
-                      <div className="lg:col-span-7 space-y-5">
-                        <CompareView
-                          originalMeta={imageMeta}
-                          result={compressionResult}
-                          isProcessing={isCompressing}
-                        />
-                      </div>
-                    </div>
+                  {!imageMeta && (
+                    <button
+                      onClick={loadDemoCompressorImage}
+                      className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong dark:text-primary-warm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+                    >
+                      <Wand2 className="w-3.5 h-3.5" />
+                      <span>{t('loadSampleCompressor')}</span>
+                    </button>
                   )}
                 </div>
-              )}
+              </div>
 
-              {/* Tool 2: AI Palette Photobooth Studio */}
-              {activeTool === 'photobooth' && (
-                <div className="space-y-6">
-                  {/* Section Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline pb-4">
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground flex items-center gap-2">
-                        <span>AI Palette Photobooth</span>
-                        <span className="text-xs bg-primary/15 text-primary-strong border border-primary/30 px-2 py-0.5 rounded font-mono font-semibold">
-                          SMART STRIP
-                        </span>
-                      </h2>
-                      <p className="text-xs sm:text-sm text-workspace-muted mt-0.5">
-                        WebRTC multi-shot camera, K-Means dominant color extraction, and dynamic canvas strip compositor.
-                      </p>
-                    </div>
+              {/* If no image selected yet, show prominent dropzone */}
+              {!imageMeta ? (
+                <div className="max-w-3xl mx-auto py-8">
+                  <Dropzone
+                    onImageSelected={handleImageSelected}
+                    currentImage={imageMeta}
+                  />
+                </div>
+              ) : (
+                /* Active Workspace: Controls & Split View */
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  {/* Left Column: Controls & Replace Dropzone */}
+                  <div className="lg:col-span-5 space-y-5">
+                    <CompressionControls
+                      imageMeta={imageMeta}
+                      settings={compressionSettings}
+                      result={compressionResult}
+                      isProcessing={isCompressing}
+                      onUpdateSettings={handleUpdateSettings}
+                    />
 
-                    <div className="flex items-center flex-wrap gap-2.5">
-                      {/* Visual Engine Status Badge */}
-                      <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft border border-workspace-outline text-workspace-foreground">
-                        <Cpu className="w-3.5 h-3.5 text-primary" />
-                        <span className="text-[11px] font-mono uppercase tracking-wide">
-                          {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-                        </span>
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-                      </div>
-
-                      {/* Security / 100% Client-Side Pill */}
-                      <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>100% Client-Side</span>
-                      </div>
-
-                      {photoboothPhotos.length === 0 && (
-                        <button
-                          onClick={loadDemoPhotoboothSet}
-                          className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-                        >
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>Muat Contoh Foto Studio</span>
-                        </button>
-                      )}
-                    </div>
+                    <Dropzone
+                      onImageSelected={handleImageSelected}
+                      currentImage={imageMeta}
+                    />
                   </div>
+
+                  {/* Right Column: Interactive Compare View & Metrics */}
+                  <div className="lg:col-span-7 space-y-5">
+                    <CompareView
+                      originalMeta={imageMeta}
+                      result={compressionResult}
+                      isProcessing={isCompressing}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tool 2: AI Palette Photobooth Studio */}
+          {activeTool === 'photobooth' && (
+            <div className="space-y-6">
+              {/* Section Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground flex items-center gap-2">
+                    <span>AI Palette Photobooth</span>
+                    <span className="text-xs bg-primary/15 text-primary-strong border border-primary/30 px-2 py-0.5 rounded font-mono font-semibold">
+                      SMART STRIP
+                    </span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted mt-0.5">
+                    WebRTC multi-shot camera, K-Means dominant color extraction, and dynamic canvas strip compositor.
+                  </p>
+                </div>
+
+                <div className="flex items-center flex-wrap gap-2.5">
+                  {/* Visual Engine Status Badge */}
+                  <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft dark:bg-workspace-dark-soft border border-workspace-outline dark:border-workspace-dark-outline text-workspace-foreground dark:text-workspace-dark-foreground">
+                    <Cpu className="w-3.5 h-3.5 text-primary" />
+                    <span className="text-[11px] font-mono uppercase tracking-wide">
+                      {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
+                    </span>
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
+                  </div>
+
+                  {/* Security / 100% Client-Side Pill */}
+                  <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>100% Client-Side</span>
+                  </div>
+
+                  {photoboothPhotos.length === 0 && (
+                    <button
+                      onClick={loadDemoPhotoboothSet}
+                      className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong dark:text-primary-warm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>{t('loadSampleStudio')}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
 
                   {photoboothPhotos.length === 0 ? (
                     /* Stage 1: Camera Viewfinder & Shutter */
@@ -408,14 +412,17 @@ export const App: React.FC = () => {
                 </div>
               )}
 
-              {/* Tool 3: Image Converter Studio */}
-              {activeTool === 'converter' && (
-                <ConverterView visualEngine={visualEngine} />
-              )}
-            </div>
-          </main>
-      </div>
-      );
+          {/* Tool 3: Image Converter Studio */}
+          {activeTool === 'converter' && (
+            <ConverterView visualEngine={visualEngine} />
+          )}
+        </div>
+      </main>
+
+      {/* Global Settings & Appearance Modal */}
+      <SettingsModal />
+    </div>
+  );
 };
 
-      export default App;
+export default App;

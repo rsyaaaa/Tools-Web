@@ -2,27 +2,122 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-workspace: #fcfaf7;
+  --bg-surface: #f3f4f6;
+  --bg-soft: #edebe9;
+  --bg-elevated: #ffffff;
+  --text-foreground: #423d38;
+  --text-muted: #797067;
+  --border-outline: #e3e0dd;
+  --border-outline-strong: #d1d5dc;
+}
+
+html.dark,
+body.dark,
+.dark,
+[data-theme="dark"] {
+  --bg-workspace: #0a0a0c;
+  --bg-surface: #141417;
+  --bg-soft: #1f1f24;
+  --bg-elevated: #131316;
+  --text-foreground: #ffffff;
+  --text-muted: #a1a1aa;
+  --border-outline: #27272a;
+  --border-outline-strong: #3f3f46;
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+}
+
+html.dark body,
+body.dark,
+[data-theme="dark"] body {
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+}
+
+/* Foolproof overrides for dark mode surfaces & text */
+html.dark #root,
+html.dark #root > div,
+html.dark main,
+.dark #root,
+.dark #root > div,
+.dark main,
+[data-theme="dark"] #root,
+[data-theme="dark"] #root > div,
+[data-theme="dark"] main {
+  background-color: #0a0a0c !important;
+  color: #ffffff !important;
+}
+
+html.dark [class*="bg-workspace-elevated"],
+.dark [class*="bg-workspace-elevated"],
+[data-theme="dark"] [class*="bg-workspace-elevated"] {
+  background-color: #131316 !important;
+  border-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+html.dark [class*="bg-workspace-surface"],
+.dark [class*="bg-workspace-surface"],
+[data-theme="dark"] [class*="bg-workspace-surface"] {
+  background-color: #141417 !important;
+  border-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+html.dark [class*="bg-workspace-soft"],
+.dark [class*="bg-workspace-soft"],
+[data-theme="dark"] [class*="bg-workspace-soft"] {
+  background-color: #1f1f24 !important;
+  border-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+html.dark [class*="text-workspace-foreground"],
+.dark [class*="text-workspace-foreground"],
+[data-theme="dark"] [class*="text-workspace-foreground"] {
+  color: #ffffff !important;
+}
+
+html.dark [class*="text-workspace-muted"],
+.dark [class*="text-workspace-muted"],
+[data-theme="dark"] [class*="text-workspace-muted"] {
+  color: #a1a1aa !important;
+}
+
+html.dark [class*="border-workspace-outline"],
+.dark [class*="border-workspace-outline"],
+[data-theme="dark"] [class*="border-workspace-outline"] {
+  border-color: #27272a !important;
+}
+
 @layer base {
+  html {
+    background-color: var(--bg-workspace);
+    color: var(--text-foreground);
+  }
   body {
-    background-color: #fcfaf7;
-    color: #423d38;
+    background-color: var(--bg-workspace);
+    color: var(--text-foreground);
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 /* Evreghen dark frosted glass styles */
 .shell-glass {
-  background-color: rgba(0, 0, 0, 0.70);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-color: rgba(255, 255, 255, 0.10);
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Custom Orange Range Slider */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  background: #edebe9;
+  background: var(--bg-soft);
   border-radius: 9999px;
   height: 6px;
   outline: none;
@@ -62,11 +157,10 @@ input[type="range"]::-webkit-slider-thumb:active {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5dc;
+  background: var(--border-outline-strong);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #797067;
+  background: var(--text-muted);
 }
-
