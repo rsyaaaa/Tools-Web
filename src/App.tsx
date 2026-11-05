@@ -201,16 +201,16 @@ export const App: React.FC = () => {
             </div>
           )}
 
-          {/* Tool 2: AI Palette Photobooth Studio */}
+          {/* Tool 2: AI Photobooth Studio */}
           {activeTool === 'photobooth' && (
             <div className="space-y-6">
               {/* Section Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground flex items-center gap-2">
-                    <span>AI Palette Photobooth</span>
+                    <span>AI Photobooth</span>
                     <span className="text-xs bg-primary/15 text-primary-strong border border-primary/30 px-2 py-0.5 rounded font-mono font-semibold">
-                      SMART STRIP
+                      20+ Themes
                     </span>
                   </h2>
                   <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted mt-0.5">

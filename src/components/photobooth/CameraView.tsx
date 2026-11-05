@@ -31,6 +31,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
 
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
@@ -41,43 +42,110 @@ export const CameraView: React.FC<CameraViewProps> = ({
   const [flashActive, setFlashActive] = useState(false);
   const [tempCapturedList, setTempCapturedList] = useState<CapturedPhoto[]>([]);
 
-  // Start Camera Stream
-  const startCamera = useCallback(async () => {
+  // Helper to reliably attach stream to video element across iOS, Android & Desktop
+  const attachStreamToVideo = useCallback((stream: MediaStream) => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.srcObject !== stream) {
+      video.srcObject = stream;
+    }
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+
+    const handleLoadedMetadata = () => {
+      video.play().catch((playErr) => {
+        console.warn('Autoplay caught:', playErr);
+      });
+    };
+
+    video.onloadedmetadata = handleLoadedMetadata;
+
+    // Direct play call as well
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.warn('Direct video.play() deferred:', err);
+      });
+    }
+  }, []);
+
+  // Multi-tier Camera Stream Acquisition with robust fallbacks
+  const startCamera = useCallback(async (mode = facingMode) => {
     setPermissionError(null);
+    setIsInitializing(true);
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
 
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('WebRTC API is not supported in this browser.');
+        throw new Error('WebRTC / Kamera tidak didukung pada browser ini.');
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 960 },
-        },
-        audio: false,
-      });
+      let stream: MediaStream | null = null;
+
+      // Tier 1: Optimal resolution with requested facingMode
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: mode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        });
+      } catch (tier1Err) {
+        console.warn('Tier 1 camera constraint failed, trying flexible facingMode:', tier1Err);
+        // Tier 2: Flexible ideal facingMode without rigid resolution
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: { ideal: mode },
+            },
+            audio: false,
+          });
+        } catch (tier2Err) {
+          console.warn('Tier 2 failed, falling back to basic video: true:', tier2Err);
+          // Tier 3: Absolute fallback (any available camera sensor)
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+          });
+        }
+      }
+
+      if (!stream) {
+        throw new Error('Gagal mendapatkan stream kamera.');
+      }
 
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
+      attachStreamToVideo(stream);
+
       setIsCameraActive(true);
+      setIsInitializing(false);
       onCameraStatusChange?.('streaming');
     } catch (err: unknown) {
       console.warn('Camera access issue:', err);
       setIsCameraActive(false);
+      setIsInitializing(false);
       onCameraStatusChange?.('permission-denied');
       setPermissionError(
-        'Kamera tidak dapat diakses atau izin ditolak. Anda dapat menggunakan mode unggah foto di bawah.'
+        'Kamera tidak dapat diakses atau izin belum diberikan. Pastikan izin kamera aktif di browser Anda, atau gunakan opsi unggah foto di bawah.'
       );
     }
-  }, [facingMode, onCameraStatusChange]);
+  }, [facingMode, attachStreamToVideo, onCameraStatusChange]);
+
+  // Keep video synced when component renders or isCameraActive updates
+  useEffect(() => {
+    if (streamRef.current && videoRef.current) {
+      attachStreamToVideo(streamRef.current);
+    }
+  }, [isCameraActive, attachStreamToVideo]);
 
   // Stop Camera
   const stopCamera = useCallback(() => {
@@ -93,14 +161,15 @@ export const CameraView: React.FC<CameraViewProps> = ({
   }, [onCameraStatusChange]);
 
   useEffect(() => {
-    startCamera();
+    startCamera(facingMode);
     return () => {
       stopCamera();
     };
-  }, [startCamera, stopCamera]);
+  }, [startCamera, stopCamera, facingMode]);
 
   const toggleCameraFacing = () => {
-    setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'));
+    const nextMode = facingMode === 'user' ? 'environment' : 'user';
+    setFacingMode(nextMode);
   };
 
   // Capture single frame from live video
@@ -289,24 +358,34 @@ export const CameraView: React.FC<CameraViewProps> = ({
           </div>
         )}
 
-        {/* Video Element */}
-        {isCameraActive ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className={`w-full h-full object-cover ${facingMode === 'user' ? 'scale-x-[-1]' : ''}`}
-          />
-        ) : (
-          /* Camera Inactive / Permission Denied Placeholder */
-          <div className="p-8 text-center text-white/70 space-y-3 max-w-md">
+        {/* Video Element: Always kept mounted in DOM to guarantee videoRef.current is valid */}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            facingMode === 'user' ? 'scale-x-[-1]' : ''
+          } ${isCameraActive ? 'opacity-100' : 'opacity-0 absolute pointer-events-none'}`}
+        />
+
+        {/* Loading Spinner State */}
+        {isInitializing && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 space-y-3 text-white">
+            <RefreshCw className="w-8 h-8 text-primary animate-spin" />
+            <span className="text-xs font-mono tracking-wider">Menghubungkan ke kamera...</span>
+          </div>
+        )}
+
+        {/* Camera Inactive / Permission Denied Placeholder */}
+        {!isCameraActive && !isInitializing && (
+          <div className="p-8 text-center text-white/70 space-y-3 max-w-md z-10">
             <Camera className="w-12 h-12 text-white/30 mx-auto" />
             <p className="text-xs text-white/60">
               {permissionError || 'Kamera sedang dinonaktifkan atau tidak tersedia.'}
             </p>
             <button
-              onClick={startCamera}
+              onClick={() => startCamera(facingMode)}
               className="px-4 py-2 bg-primary hover:bg-primary-strong text-white text-xs font-semibold rounded shadow-raised transition-colors inline-flex items-center gap-2"
             >
               <RefreshCw className="w-3.5 h-3.5" />
