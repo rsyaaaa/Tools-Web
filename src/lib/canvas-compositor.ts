@@ -336,8 +336,8 @@ function drawThemeDecorations(
       drawStar4(ctx, width - margin / 2, 190, 18, 4, '#22D3EE');
       drawStar4(ctx, margin / 2, 420, 26, 6, '#C084FC');
       drawStar4(ctx, width - margin / 2, 590, 20, 5, '#F472B6');
-      drawStar4(ctx, width / 2 - 120, footerY + 28, 14, 3, '#38BDF8');
-      drawStar4(ctx, width / 2 + 120, footerY + 28, 14, 3, '#D946EF');
+      drawStar4(ctx, width / 2 - 200, footerY + 28, 14, 3, '#38BDF8');
+      drawStar4(ctx, width / 2 + 200, footerY + 28, 14, 3, '#D946EF');
 
       // Cyber diagonal scanline grid accent in footer
       ctx.save();
@@ -415,8 +415,8 @@ function drawThemeDecorations(
       drawChineseCloud(ctx, width - 35, 180, 0.85, '#FBBF24');
       drawChineseCloud(ctx, 30, 390, 0.8, '#FBBF24');
       drawChineseCloud(ctx, width - 35, 560, 0.85, '#FBBF24');
-      drawChineseCloud(ctx, width / 2 - 130, footerY + 30, 0.9, '#FDE047');
-      drawChineseCloud(ctx, width / 2 + 100, footerY + 30, 0.9, '#FDE047');
+      drawChineseCloud(ctx, 45, footerY + 30, 0.9, '#FDE047');
+      drawChineseCloud(ctx, width - 55, footerY + 30, 0.9, '#FDE047');
 
       // Double imperial border lines
       ctx.save();
@@ -529,8 +529,8 @@ function drawThemeDecorations(
       drawMaple(width - 24, 190, -0.5, '#B45309');
       drawMaple(20, 370, 0.7, '#EA580C');
       drawMaple(width - 20, 540, -0.3, '#D97706');
-      drawMaple(width / 2 - 120, footerY + 30, 0.6, '#C2410C');
-      drawMaple(width / 2 + 120, footerY + 30, -0.5, '#D97706');
+      drawMaple(width / 2 - 200, footerY + 30, 0.6, '#C2410C');
+      drawMaple(width / 2 + 200, footerY + 30, -0.5, '#D97706');
       break;
     }
 
@@ -567,8 +567,8 @@ function drawThemeDecorations(
       drawCoffeeBean(width - 22, 190, -0.6);
       drawCoffeeBean(20, 390, 0.8);
       drawCoffeeBean(width - 20, 560, -0.3);
-      drawCoffeeBean(width / 2 - 110, footerY + 30, 0.2);
-      drawCoffeeBean(width / 2 + 110, footerY + 30, -0.4);
+      drawCoffeeBean(width / 2 - 190, footerY + 30, 0.2);
+      drawCoffeeBean(width / 2 + 190, footerY + 30, -0.4);
       break;
     }
 
