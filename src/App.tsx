@@ -23,7 +23,7 @@ import {
 } from './types';
 import { compressImage } from './lib/image-compressor';
 import { extractPaletteFromImage } from './lib/color-analyzer';
-import { Sparkles, Wand2, Cpu, ShieldCheck } from 'lucide-react';
+import { Wand2, Cpu, ShieldCheck } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { t } = useApp();
@@ -136,7 +136,7 @@ export const App: React.FC = () => {
 
   // --- Tool 2: AI Palette Photobooth State ---
   const [photoboothPhotos, setPhotoboothPhotos] = useState<CapturedPhoto[]>([]);
-  const [targetCount, setTargetCount] = useState<3 | 4>(4);
+  const [targetCount, setTargetCount] = useState<1 | 2 | 3 | 4>(4);
   const [paletteAnalysis, setPaletteAnalysis] = useState<PaletteAnalysis | null>(null);
   const [isAnalyzingPalette, setIsAnalyzingPalette] = useState(false);
 
@@ -184,47 +184,6 @@ export const App: React.FC = () => {
   const handleRetakePhotobooth = () => {
     setPhotoboothPhotos([]);
     setPaletteAnalysis(null);
-  };
-
-  // Helper: Load a set of demo portraits for Photobooth testing
-  const loadDemoPhotoboothSet = () => {
-    const colors = ['#F97316', '#3B82F6', '#10B981', '#8B5CF6'];
-    const demoPhotos: CapturedPhoto[] = colors.slice(0, targetCount).map((c, i) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 640;
-      canvas.height = 480;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Gradient portrait simulation
-        const g = ctx.createLinearGradient(0, 0, 640, 480);
-        g.addColorStop(0, c);
-        g.addColorStop(1, '#1E293B');
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 640, 480);
-
-        // Portrait silhouette representation
-        ctx.fillStyle = '#FFFFFF';
-        ctx.beginPath();
-        ctx.arc(320, 200, 75, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(320, 400, 140, 90, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#0F172A';
-        ctx.font = 'bold 24px ui-mono, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(`STUDIO POSE #${i + 1}`, 320, 205);
-      }
-      return {
-        id: `demo-${i}`,
-        dataUrl: canvas.toDataURL('image/jpeg', 0.95),
-        width: 640,
-        height: 480,
-      };
-    });
-
-    handlePhotosCaptured(demoPhotos);
   };
 
   return (
@@ -341,36 +300,9 @@ export const App: React.FC = () => {
                     WebRTC multi-shot camera, K-Means dominant color extraction, and dynamic canvas strip compositor.
                   </p>
                 </div>
-
-                <div className="flex items-center flex-wrap gap-2.5">
-                  {/* Visual Engine Status Badge */}
-                  <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft dark:bg-workspace-dark-soft border border-workspace-outline dark:border-workspace-dark-outline text-workspace-foreground dark:text-workspace-dark-foreground">
-                    <Cpu className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-[11px] font-mono uppercase tracking-wide">
-                      {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-                    </span>
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-                  </div>
-
-                  {/* Security / 100% Client-Side Pill */}
-                  <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>100% Client-Side</span>
-                  </div>
-
-                  {photoboothPhotos.length === 0 && (
-                    <button
-                      onClick={loadDemoPhotoboothSet}
-                      className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong dark:text-primary-warm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>{t('loadSampleStudio')}</span>
-                    </button>
-                  )}
-                </div>
               </div>
 
-                  {photoboothPhotos.length === 0 ? (
+              {photoboothPhotos.length === 0 ? (
                     /* Stage 1: Camera Viewfinder & Shutter */
                     <div className="max-w-3xl mx-auto">
                       <CameraView

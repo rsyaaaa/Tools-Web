@@ -5,9 +5,6 @@ import {
   RefreshCw,
   ArrowRight,
   Layers,
-  Sliders,
-  Camera,
-  CheckCircle2,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -91,61 +88,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Interactive Tool Menu Cards (3 Cards) */}
+      {/* Interactive Tool Menu Cards (3 Cards) - Order: Photobooth -> Compressor -> Converter */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-        {/* Card 1: Image Compressor Studio */}
-        <div
-          onClick={() => onNavigate('compressor')}
-          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
-        >
-          <div className="space-y-4">
-            {/* Top Card Icon & Badge */}
-            <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
-                <FileImage className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
-                TOOL 01 // MATRIX
-              </span>
-            </div>
-
-            {/* Title & Description */}
-            <div className="space-y-1.5">
-              <h2 className="text-lg font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-2">
-                <span>{t('compressorTitle')}</span>
-              </h2>
-              <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
-                {t('card1Desc')}
-              </p>
-            </div>
-
-            {/* Feature Highlights */}
-            <div className="space-y-1.5 pt-2 border-t border-workspace-outline/60 dark:border-workspace-dark-outline text-xs text-workspace-foreground dark:text-workspace-dark-foreground font-mono">
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>Format: JPEG, PNG, WebP</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <Sliders className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <span>{lang === 'id' ? 'Preset % & Dimensi Kustom' : 'Preset % & Custom WxH'}</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>Curtain Split Inspector</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Action Footer */}
-          <div className="pt-2">
-            <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
-              <span>{t('card1Btn')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: AI Palette Photobooth */}
+        {/* Card 1: AI Palette Photobooth */}
         <div
           onClick={() => onNavigate('photobooth')}
           className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
@@ -157,7 +102,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 <Sparkles className="w-6 h-6" />
               </div>
               <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
-                TOOL 02 // HEURISTIC
+                TOOL 01 // HEURISTIC
               </span>
             </div>
 
@@ -170,28 +115,48 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 {t('card2Desc')}
               </p>
             </div>
-
-            {/* Feature Highlights */}
-            <div className="space-y-1.5 pt-2 border-t border-workspace-outline/60 dark:border-workspace-dark-outline text-xs text-workspace-foreground dark:text-workspace-dark-foreground font-mono">
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <Camera className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <span>WebRTC Shutter & Countdown 3s</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>K-Means Sub-200ms & Mood Tone</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>Procedural Film Grain Strip</span>
-              </div>
-            </div>
           </div>
 
           {/* Action Footer */}
           <div className="pt-2">
             <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
               <span>{t('card2Btn')}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Image Compressor Studio */}
+        <div
+          onClick={() => onNavigate('compressor')}
+          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
+        >
+          <div className="space-y-4">
+            {/* Top Card Icon & Badge */}
+            <div className="flex items-center justify-between">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
+                <FileImage className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
+                TOOL 02 // MATRIX
+              </span>
+            </div>
+
+            {/* Title & Description */}
+            <div className="space-y-1.5">
+              <h2 className="text-lg font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                <span>{t('compressorTitle')}</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
+                {t('card1Desc')}
+              </p>
+            </div>
+          </div>
+
+          {/* Action Footer */}
+          <div className="pt-2">
+            <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
+              <span>{t('card1Btn')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -221,22 +186,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
                 {t('card3Desc')}
               </p>
-            </div>
-
-            {/* Feature Highlights */}
-            <div className="space-y-1.5 pt-2 border-t border-workspace-outline/60 dark:border-workspace-dark-outline text-xs text-workspace-foreground dark:text-workspace-dark-foreground font-mono">
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>JPEG, JPG, PNG, GIF, BMP, TIFF</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>ICO, SVG, EPS, PDF & HEIC Input</span>
-              </div>
-              <div className="flex items-center gap-2 text-workspace-muted dark:text-workspace-dark-muted">
-                <CheckCircle2 className="w-3.5 h-3.5 text-status-success flex-shrink-0" />
-                <span>Multi-File Batch & Quality Control</span>
-              </div>
             </div>
           </div>
 

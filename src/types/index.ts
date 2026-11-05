@@ -67,8 +67,9 @@ export interface CapturedPhoto {
 }
 
 export interface StripConfig {
-  shotCount: 3 | 4;
+  shotCount: 1 | 2 | 3 | 4;
   frameColor: string;
+  gradientTo?: string;
   borderColor: string;
   textColor: string;
   label: string;
@@ -76,6 +77,8 @@ export interface StripConfig {
   grainIntensity: number; // 0 to 0.25
   innerPadding: number;
   borderWidth: number;
+  themeId?: string;
+  patternType?: string;
 }
 
 // --- Image Converter Types ---

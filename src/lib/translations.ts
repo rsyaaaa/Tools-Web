@@ -67,6 +67,8 @@ export const translations = {
     // Photobooth
     loadSampleStudio: 'Muat Contoh Foto Studio',
     viewfinderTitle: 'Viewfinder & Shutter Kamera',
+    shots1: '1 Foto',
+    shots2: '2 Foto',
     shots3: '3 Foto',
     shots4: '4 Foto',
     uploadPhotos: 'Upload Foto',
@@ -164,6 +166,8 @@ export const translations = {
     // Photobooth
     loadSampleStudio: 'Load Sample Studio Set',
     viewfinderTitle: 'Live Viewfinder & Shutter',
+    shots1: '1 Shot',
+    shots2: '2 Shots',
     shots3: '3 Shots',
     shots4: '4 Shots',
     uploadPhotos: 'Upload Photos',

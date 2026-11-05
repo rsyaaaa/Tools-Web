@@ -17,14 +17,14 @@ export default {
           muted: 'var(--text-muted)',
           outline: 'var(--border-outline)',
           'outline-strong': 'var(--border-outline-strong)',
-          // Explicit dark mode values for backwards compatibility
-          'dark-bg': '#0a0a0c',
-          'dark-surface': '#141417',
-          'dark-soft': '#1f1f24',
-          'dark-elevated': '#131316',
-          'dark-foreground': '#ffffff',
-          'dark-muted': '#a1a1aa',
-          'dark-outline': '#27272a',
+          // GitHub dark palette tokens
+          'dark-bg': '#0d1117',
+          'dark-surface': '#21262d',
+          'dark-soft': '#21262d',
+          'dark-elevated': '#161b22',
+          'dark-foreground': '#e6edf3',
+          'dark-muted': '#7d8590',
+          'dark-outline': '#30363d',
         },
         primary: {
           DEFAULT: '#fe6e00',
@@ -33,10 +33,10 @@ export default {
           focus: '#f97015',
         },
         shell: {
-          bg: 'rgba(0, 0, 0, 0.75)',
-          border: 'rgba(255, 255, 255, 0.12)',
-          text: '#ffffff',
-          'text-muted': 'rgba(255, 255, 255, 0.65)',
+          bg: 'rgba(13, 17, 23, 0.85)',
+          border: 'rgba(240, 246, 252, 0.12)',
+          text: '#f0f6fc',
+          'text-muted': '#7d8590',
         },
         status: {
           success: '#00c758',

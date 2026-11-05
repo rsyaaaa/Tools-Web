@@ -77,30 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             )}
 
-            {/* Tool 1: Image Compressor */}
-            <button
-              onClick={() => handleToolClick('compressor')}
-              title={t('compressorTitle')}
-              className={`w-full flex items-center rounded-md transition-all text-left ${
-                !isHovered ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
-              } ${
-                activeTool === 'compressor'
-                  ? 'bg-primary text-white font-medium shadow-raised'
-                  : 'text-white/70 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <FileImage className="w-5 h-5 flex-shrink-0" />
-              {isHovered && (
-                <div className="flex flex-col flex-1 min-w-0">
-                  <span className="text-xs truncate">{t('compressorTitle')}</span>
-                  <span className="text-[10px] text-white/60 tracking-tight">
-                    {t('compressorSubtitle')}
-                  </span>
-                </div>
-              )}
-            </button>
-
-            {/* Tool 2: AI Palette Photobooth */}
+            {/* Tool 1: AI Palette Photobooth */}
             <button
               onClick={() => handleToolClick('photobooth')}
               title={t('photoboothTitle')}
@@ -118,6 +95,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span className="text-xs truncate">{t('photoboothTitle')}</span>
                   <span className="text-[10px] text-white/60 tracking-tight">
                     {t('photoboothSubtitle')}
+                  </span>
+                </div>
+              )}
+            </button>
+
+            {/* Tool 2: Image Compressor */}
+            <button
+              onClick={() => handleToolClick('compressor')}
+              title={t('compressorTitle')}
+              className={`w-full flex items-center rounded-md transition-all text-left ${
+                !isHovered ? 'justify-center p-3' : 'space-x-3 px-3 py-2.5'
+              } ${
+                activeTool === 'compressor'
+                  ? 'bg-primary text-white font-medium shadow-raised'
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <FileImage className="w-5 h-5 flex-shrink-0" />
+              {isHovered && (
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="text-xs truncate">{t('compressorTitle')}</span>
+                  <span className="text-[10px] text-white/60 tracking-tight">
+                    {t('compressorSubtitle')}
                   </span>
                 </div>
               )}

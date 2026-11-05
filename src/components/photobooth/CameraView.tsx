@@ -9,11 +9,12 @@ import {
 } from 'lucide-react';
 import { CapturedPhoto, CameraStatus } from '../../types';
 import { soundFx } from '../../lib/audio-fx';
+import { useApp } from '../../context/AppContext';
 
 interface CameraViewProps {
   onPhotosCaptured: (photos: CapturedPhoto[]) => void;
-  targetCount: 3 | 4;
-  onTargetCountChange: (count: 3 | 4) => void;
+  targetCount: 1 | 2 | 3 | 4;
+  onTargetCountChange: (count: 1 | 2 | 3 | 4) => void;
   onCameraStatusChange?: (status: CameraStatus) => void;
 }
 
@@ -23,6 +24,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
   onTargetCountChange,
   onCameraStatusChange,
 }) => {
+  const { t } = useApp();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -227,30 +229,22 @@ export const CameraView: React.FC<CameraViewProps> = ({
         </div>
 
         <div className="flex items-center space-x-2">
-          {/* Target Shot Count Selector (3 vs 4) */}
+          {/* Target Shot Count Selector (1, 2, 3, 4) */}
           <div className="flex items-center bg-workspace rounded border border-workspace-outline p-0.5 text-xs font-mono">
-            <button
-              onClick={() => onTargetCountChange(3)}
-              disabled={isCapturingSequence}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                targetCount === 3
-                  ? 'bg-primary text-white font-bold'
-                  : 'text-workspace-muted hover:text-workspace-foreground'
-              }`}
-            >
-              3 Shots
-            </button>
-            <button
-              onClick={() => onTargetCountChange(4)}
-              disabled={isCapturingSequence}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                targetCount === 4
-                  ? 'bg-primary text-white font-bold'
-                  : 'text-workspace-muted hover:text-workspace-foreground'
-              }`}
-            >
-              4 Shots
-            </button>
+            {([1, 2, 3, 4] as const).map((count) => (
+              <button
+                key={count}
+                onClick={() => onTargetCountChange(count)}
+                disabled={isCapturingSequence}
+                className={`px-2 py-1 rounded transition-colors text-[11px] sm:text-xs ${
+                  targetCount === count
+                    ? 'bg-primary text-white font-bold shadow-xs'
+                    : 'text-workspace-muted hover:text-workspace-foreground'
+                }`}
+              >
+                {count === 1 ? t('shots1') : count === 2 ? t('shots2') : count === 3 ? t('shots3') : t('shots4')}
+              </button>
+            ))}
           </div>
 
           {/* Sound Toggle */}
@@ -363,7 +357,9 @@ export const CameraView: React.FC<CameraViewProps> = ({
           className="w-full sm:w-auto px-4 py-2.5 rounded border border-workspace-outline bg-workspace-elevated hover:bg-workspace-soft text-workspace-foreground text-xs font-medium flex items-center justify-center space-x-2 transition-colors disabled:opacity-40"
         >
           <Upload className="w-4 h-4 text-primary" />
-          <span>Upload Foto ({targetCount} Files)</span>
+          <span>
+            {t('uploadPhotos')} ({targetCount} {targetCount === 1 ? 'File' : 'Files'})
+          </span>
         </button>
 
         {/* Main Big Shutter Button */}
@@ -376,7 +372,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
           <span>
             {isCapturingSequence
               ? `Capturing ${currentShotIndex + 1}/${targetCount}...`
-              : `Mulai Sesi Photobooth (${targetCount} Shots)`}
+              : `${t('startPhotoboothSession')} (${targetCount} ${targetCount === 1 ? 'Shot' : 'Shots'})`}
           </span>
         </button>
       </div>
