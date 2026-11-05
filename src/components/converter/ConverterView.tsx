@@ -590,14 +590,14 @@ export const ConverterView: React.FC<ConverterViewProps> = () => {
                         </div>
 
                         {/* Right: Controls & Actions */}
-                        <div className="flex items-center space-x-2 self-end sm:self-auto flex-shrink-0">
+                        <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end pt-2 sm:pt-0 border-t sm:border-0 border-workspace-outline/40 flex-shrink-0">
                           {/* Target Format dropdown per item */}
                           <select
                             value={item.targetFormat}
                             onChange={(e) =>
                               handleSetItemTargetFormat(item.id, e.target.value as ConvertTargetFormat)
                             }
-                            className="text-[11px] font-mono rounded bg-workspace border border-workspace-outline px-2 py-1 text-workspace-foreground focus:outline-none focus:border-primary"
+                            className="text-[11px] font-mono rounded bg-workspace border border-workspace-outline px-2 py-1 text-workspace-foreground focus:outline-none focus:border-primary flex-1 sm:flex-none max-w-[130px]"
                           >
                             {AVAILABLE_FORMATS.map((fmt) => (
                               <option key={fmt.format} value={fmt.format}>
@@ -606,42 +606,44 @@ export const ConverterView: React.FC<ConverterViewProps> = () => {
                             ))}
                           </select>
 
-                          {/* Convert Button */}
-                          <button
-                            onClick={() => convertItem(item.id)}
-                            disabled={item.status === 'converting'}
-                            className="px-2.5 py-1 rounded bg-primary text-white text-xs font-semibold hover:bg-primary-strong transition-colors disabled:opacity-40"
-                            title="Konversi Berkas Ini"
-                          >
-                            {item.status === 'converting' ? (
-                              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                            ) : (
-                              'Konversi'
-                            )}
-                          </button>
-
-                          {/* Download Single Button */}
-                          {item.status === 'completed' && item.convertedBlob && (
+                          <div className="flex items-center space-x-1.5">
+                            {/* Convert Button */}
                             <button
-                              onClick={() =>
-                              downloadConvertedFile(item.convertedBlob!, item.name, item.targetFormat, useJpegExtension)
-                          }
-                          className="p-1.5 rounded bg-status-prod-bg text-status-prod-fg border border-status-success/30 hover:bg-status-success hover:text-white transition-colors"
-                          title="Unduh Berkas Hasil"
-                          >
-                          <Download className="w-3.5 h-3.5" />
-                        </button>
-                        )}
+                              onClick={() => convertItem(item.id)}
+                              disabled={item.status === 'converting'}
+                              className="px-2.5 py-1 rounded bg-primary text-white text-xs font-semibold hover:bg-primary-strong transition-colors disabled:opacity-40"
+                              title="Konversi Berkas Ini"
+                            >
+                              {item.status === 'converting' ? (
+                                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                'Konversi'
+                              )}
+                            </button>
 
-                        {/* Remove item button */}
-                        <button
-                          onClick={() => handleRemoveItem(item.id)}
-                          className="p-1.5 text-workspace-muted hover:text-status-danger transition-colors"
-                          title="Hapus dari antrean"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
+                            {/* Download Single Button */}
+                            {item.status === 'completed' && item.convertedBlob && (
+                              <button
+                                onClick={() =>
+                                  downloadConvertedFile(item.convertedBlob!, item.name, item.targetFormat, useJpegExtension)
+                                }
+                                className="p-1.5 rounded bg-status-prod-bg text-status-prod-fg border border-status-success/30 hover:bg-status-success hover:text-white transition-colors"
+                                title="Unduh Berkas Hasil"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+
+                            {/* Remove item button */}
+                            <button
+                              onClick={() => handleRemoveItem(item.id)}
+                              className="p-1.5 text-workspace-muted hover:text-status-danger transition-colors"
+                              title="Hapus dari antrean"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
                     </div>
                 );
                 })}

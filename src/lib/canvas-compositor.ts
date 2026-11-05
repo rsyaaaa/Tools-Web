@@ -1,6 +1,24 @@
 import { CapturedPhoto, StripConfig } from '../types';
 import { loadImage } from './image-compressor';
 
+// In-memory cache for decoded photo HTMLImageElements to make theme switching instant (0ms image re-decode)
+const photoImageCache = new Map<string, HTMLImageElement>();
+
+export function clearPhotoboothImageCache(): void {
+  photoImageCache.clear();
+}
+
+async function getCachedPhotoElement(photo: CapturedPhoto): Promise<HTMLImageElement> {
+  const key = photo.id || photo.dataUrl;
+  const existing = photoImageCache.get(key);
+  if (existing && existing.complete && existing.naturalWidth > 0) {
+    return existing;
+  }
+  const img = await loadImage(photo.dataUrl);
+  photoImageCache.set(key, img);
+  return img;
+}
+
 /**
  * Creates procedural film grain texture buffer
  */
@@ -767,7 +785,7 @@ export async function renderPhotoboothStrip(
     if (!photo) continue;
     const yPos = marginTop + i * (photoHeight + photoGap);
 
-    const img = await loadImage(photo.dataUrl);
+    const img = await getCachedPhotoElement(photo);
 
     // Subtle photo frame / border
     ctx.save();

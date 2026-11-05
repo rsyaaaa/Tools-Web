@@ -36,9 +36,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   }, [currentQuotes.length]);
 
   return (
-    <div className="space-y-8 py-4 sm:py-6 max-w-5xl mx-auto relative">
-      {/* Top Header Row with Dark/Light Mode Toggle in the Top-Right Corner */}
-      <div className="flex justify-end items-center relative z-30">
+    <div className="space-y-5 sm:space-y-6 py-2 sm:py-6 max-w-3xl sm:max-w-4xl mx-auto relative">
+      {/* Top Header Row with Dark/Light Mode Toggle (Desktop only, mobile has it in top bar) */}
+      <div className="hidden md:flex justify-end items-center relative z-30">
         <button
           type="button"
           id="theme-toggle-btn"
@@ -52,32 +52,32 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               ? (lang === 'id' ? 'Beralih ke Mode Terang' : 'Switch to Light Mode')
               : (lang === 'id' ? 'Beralih ke Mode Gelap' : 'Switch to Dark Mode')
           }
-          className="w-11 h-11 rounded-full flex items-center justify-center bg-workspace-elevated border-2 border-workspace-outline text-workspace-foreground hover:border-primary hover:text-primary active:scale-90 transition-all shadow-raised group cursor-pointer"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-workspace-elevated border-2 border-workspace-outline text-workspace-foreground hover:border-primary hover:text-primary active:scale-90 transition-all shadow-raised group cursor-pointer"
         >
           {theme === 'dark' ? (
-            <Sun className="w-5 h-5 text-amber-400 group-hover:rotate-90 transition-transform duration-300" />
+            <Sun className="w-4 h-4 text-amber-400 group-hover:rotate-90 transition-transform duration-300" />
           ) : (
-            <Moon className="w-5 h-5 text-primary group-hover:-rotate-12 transition-transform duration-300" />
+            <Moon className="w-4 h-4 text-primary group-hover:-rotate-12 transition-transform duration-300" />
           )}
         </button>
       </div>
 
       {/* Central Hero Stage */}
-      <div className="text-center space-y-4 pt-0 pb-2">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-primary-strong dark:text-primary-warm text-xs font-mono font-semibold">
+      <div className="text-center space-y-2.5 sm:space-y-3.5 pt-0 pb-1">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary-strong dark:text-primary-warm text-[10px] sm:text-xs font-mono font-semibold">
           <Layers className="w-3.5 h-3.5" />
           <span>{t('freeClientSideBadge')}</span>
         </div>
 
         {/* Big Central Question */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground leading-tight">
           {t('heroQuestion')}
         </h1>
 
         {/* Dynamic Motivational Quote (Max 8 words) */}
-        <div className="h-8 flex items-center justify-center">
+        <div className="h-6 sm:h-7 flex items-center justify-center">
           <p
-            className={`text-sm sm:text-base font-medium text-workspace-muted dark:text-workspace-dark-muted transition-all duration-300 transform ${
+            className={`text-xs sm:text-sm font-medium text-workspace-muted dark:text-workspace-dark-muted transition-all duration-300 transform ${
               fadeState === 'in'
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 -translate-y-1'
@@ -88,40 +88,40 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Interactive Tool Menu Cards (3 Cards) - Order: Photobooth -> Compressor -> Converter */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
-        {/* Card 1: AI Palette Photobooth */}
+      {/* Interactive Tool Menu Cards (3 Cards) - Sized compactly to match headline */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl sm:max-w-3xl mx-auto pt-1 sm:pt-2">
+        {/* Card 1: AI Photobooth */}
         <div
           onClick={() => onNavigate('photobooth')}
-          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
+          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-3.5 sm:p-4 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3"
         >
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {/* Top Card Icon & Badge */}
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
-                <Sparkles className="w-6 h-6" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
-                TOOL 01 // HEURISTIC
+              <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
+                20+ THEMES
               </span>
             </div>
 
             {/* Title & Description */}
-            <div className="space-y-1.5">
-              <h2 className="text-lg font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+            <div className="space-y-1">
+              <h2 className="text-sm sm:text-base font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-1.5">
                 <span>{t('photoboothTitle')}</span>
               </h2>
-              <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
+              <p className="text-xs text-workspace-muted dark:text-workspace-dark-muted leading-relaxed line-clamp-2">
                 {t('card2Desc')}
               </p>
             </div>
           </div>
 
           {/* Action Footer */}
-          <div className="pt-2">
-            <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
-              <span>{t('card2Btn')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <div className="pt-1">
+            <div className="w-full h-8 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-1.5 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
+              <span className="text-[11px]">{t('card2Btn')}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>
@@ -129,35 +129,35 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         {/* Card 2: Image Compressor Studio */}
         <div
           onClick={() => onNavigate('compressor')}
-          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
+          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-3.5 sm:p-4 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3"
         >
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {/* Top Card Icon & Badge */}
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
-                <FileImage className="w-6 h-6" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
+                <FileImage className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
-                TOOL 02 // MATRIX
+              <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
+                LOSSLESS
               </span>
             </div>
 
             {/* Title & Description */}
-            <div className="space-y-1.5">
-              <h2 className="text-lg font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+            <div className="space-y-1">
+              <h2 className="text-sm sm:text-base font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-1.5">
                 <span>{t('compressorTitle')}</span>
               </h2>
-              <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
+              <p className="text-xs text-workspace-muted dark:text-workspace-dark-muted leading-relaxed line-clamp-2">
                 {t('card1Desc')}
               </p>
             </div>
           </div>
 
           {/* Action Footer */}
-          <div className="pt-2">
-            <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
-              <span>{t('card1Btn')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <div className="pt-1">
+            <div className="w-full h-8 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-1.5 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
+              <span className="text-[11px]">{t('card1Btn')}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>
@@ -165,35 +165,35 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         {/* Card 3: Image Converter Studio */}
         <div
           onClick={() => onNavigate('converter')}
-          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-6 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-6"
+          className="group relative bg-workspace-elevated dark:bg-workspace-dark-elevated rounded-lg border border-workspace-outline dark:border-workspace-dark-outline p-3.5 sm:p-4 shadow-subtle hover:shadow-raised hover:border-primary/70 transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3"
         >
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {/* Top Card Icon & Badge */}
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
-                <RefreshCw className="w-6 h-6" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all">
+                <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
-                TOOL 03 // CONVERTER
+              <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-workspace-soft dark:bg-workspace-dark-soft text-workspace-muted dark:text-workspace-dark-muted border border-workspace-outline dark:border-workspace-dark-outline">
+                10 FORMATS
               </span>
             </div>
 
             {/* Title & Description */}
-            <div className="space-y-1.5">
-              <h2 className="text-lg font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+            <div className="space-y-1">
+              <h2 className="text-sm sm:text-base font-bold text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors flex items-center gap-1.5">
                 <span>{t('converterTitle')}</span>
               </h2>
-              <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted leading-relaxed">
+              <p className="text-xs text-workspace-muted dark:text-workspace-dark-muted leading-relaxed line-clamp-2">
                 {t('card3Desc')}
               </p>
             </div>
           </div>
 
           {/* Action Footer */}
-          <div className="pt-2">
-            <div className="w-full h-10 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-2 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
-              <span>{t('card3Btn')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <div className="pt-1">
+            <div className="w-full h-8 rounded-sm bg-workspace-surface dark:bg-workspace-dark-surface group-hover:bg-primary text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center space-x-1.5 transition-all border border-workspace-outline dark:border-workspace-dark-outline group-hover:border-primary shadow-xs">
+              <span className="text-[11px]">{t('card3Btn')}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>

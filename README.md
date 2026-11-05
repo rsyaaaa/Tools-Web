@@ -18,6 +18,7 @@
 | **100% Diproses di Browser** | Seluruh operasi grafis dikerjakan langsung oleh mesin browser perangkat Anda (Client-Side). |
 | **100% Tanpa Upload Database** | Foto dan data Anda tidak pernah meninggalkan perangkat; zero telemetry & zero data persistence. |
 | **Free to Use & Open Source** | Bebas digunakan secara gratis selamanya untuk kebutuhan pribadi maupun komersial. |
+| **Mobile Responsive** | Tampilan UI adaptif untuk perangkat mobile dengan drawer menu, navigasi panah, gesture swipe foto, dan layout layar sentuh. |
 | **Bilingual (ID & EN)** | Mendukung penuh peralihan instan antara **Bahasa Indonesia** dan **English**. |
 | **Dark Mode & Light Mode** | Tampilan visual elegan dengan tema gelap bertaraf *GitHub Dark* (`#0d1117`) dan mode terang yang bersih. |
 | **AI Photobooth (22 Tema)** | Studio foto interaktif dengan live webcam/upload, pilihan 1 hingga 4 shots, ekstraksi palet K-Means, dan 22 tema frame ornamen vektor. |
@@ -154,21 +155,6 @@ Berikut adalah sampel hasil cetak strip foto photobooth (format 2-shots) dengan 
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
-
-* **UI Library:** [React 18](https://react.dev/) & [React DOM](https://react.dev/)
-* **Build Tool & Dev Server:** [Vite](https://vitejs.dev/)
-* **Language:** [TypeScript](https://www.typescriptlang.org/)
-* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-* **Icons:** [Lucide React](https://lucide.dev/)
-* **Client Decoder:** [heic2any](https://github.com/alexcorvi/heic2any) (Decoder file gambar Apple HEIC di sisi browser)
-* **Graphics & Audio Engine:** 
-  * HTML5 Canvas 2D API (`CanvasRenderingContext2D`) untuk rendering & compositing foto resolusi tinggi
-  * WebRTC Media Stream API untuk live video kamera
-  * Web Audio API (`AudioContext`) untuk synthesizer suara shutter prosedural tanpa aset audio eksternal
-
----
-
 ## 📁 Struktur Folder
 
 ```text
@@ -177,28 +163,29 @@ Web-Tools/
 ├── sample/                 # 22 Contoh sampel hasil cetak Photobooth (.png)
 ├── src/
 │   ├── components/         # Komponen UI Modular
-│   │   ├── compressor/     # Modul Image Compressor (Dropzone, Controls, Compare)
-│   │   ├── converter/      # Modul Image Converter (Batch, Format Selector)
-│   │   ├── home/           # Halaman Utama (Hero & Navigasi Modul)
-│   │   ├── layout/         # Header & Navigasi Sidebar Responsif
-│   │   ├── photobooth/     # Modul AI Photobooth (CameraView, TemplateSelector, StripPreview)
-│   │   └── settings/       # Modal Pengaturan (Tema & Bahasa)
+│   │   ├── compressor/     # Modul Image Compressor (Dropzone, CompressionControls, CompareView)
+│   │   ├── converter/      # Modul Image Converter (ConverterView)
+│   │   ├── home/           # Halaman Utama / Launchpad (HomeView)
+│   │   ├── layout/         # Header & Navigasi Sidebar Responsif (Drawer Mobile)
+│   │   ├── photobooth/     # Modul AI Photobooth Studio (CameraView, PaletteCard, TemplateSelector, StripPreview)
+│   │   └── settings/       # Modal Pengaturan (SettingsModal)
 │   ├── context/            # Global State Management (AppContext)
 │   ├── lib/                # Engine Pemrosesan & Algoritma
-│   │   ├── audio-fx.ts           # Web Audio API Sound Generator
-│   │   ├── canvas-compositor.ts  # Mesin Render Strip Foto & Frame Vektor
-│   │   ├── color-analyzer.ts     # Algoritma Ekstraksi Warna K-Means
+│   │   ├── audio-fx.ts           # Web Audio API Procedural Sound Generator
+│   │   ├── canvas-compositor.ts  # Mesin Render Strip Foto, Cache Element, & Frame Vektor
+│   │   ├── color-analyzer.ts     # Algoritma Ekstraksi Palet Warna K-Means
 │   │   ├── format-encoders.ts    # Binary Encoders (BMP, ICO, TIFF, SVG)
 │   │   ├── image-compressor.ts   # Pipeline Kompresi Client-Side
 │   │   ├── image-converter.ts    # Matrix Konverter 10 Format Gambar
 │   │   ├── photobooth-themes.ts  # Konfigurasi 22 Tema Vektor Photobooth
-│   │   └── translations.ts       # Sistem Lokalisasi (ID / EN)
+│   │   └── translations.ts       # Sistem Lokalisasi Bilingual (ID / EN)
 │   ├── types/              # Definisi TypeScript Interfaces
 │   ├── App.tsx             # Root Application Component
 │   ├── index.css           # Konfigurasi Tailwind & Global Styling
 │   └── main.tsx            # Entry Point React DOM
 ├── index.html              # HTML5 Shell
 ├── package.json            # Daftar Dependencies & Script
+├── postcss.config.js       # Konfigurasi PostCSS
 ├── tailwind.config.js      # Konfigurasi Tema & Warna Tailwind
 ├── tsconfig.json           # Konfigurasi Kompiler TypeScript
 └── vite.config.ts          # Konfigurasi Build Vite

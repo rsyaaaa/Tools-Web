@@ -32,18 +32,18 @@ export const PaletteCard: React.FC<PaletteCardProps> = ({ palette, isAnalyzing }
   };
 
   return (
-    <div className="bg-workspace-elevated rounded-lg border border-workspace-outline p-5 shadow-subtle space-y-5">
+    <div className="bg-workspace-elevated rounded-lg border border-workspace-outline p-3.5 sm:p-5 shadow-subtle space-y-3.5 sm:space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-workspace-outline pb-3">
         <div className="flex items-center space-x-2">
           <Palette className="w-4 h-4 text-primary" />
-          <h3 className="text-sm font-bold uppercase tracking-wider text-workspace-foreground">
+          <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-workspace-foreground">
             AI Palette & Tone Analyzer
           </h3>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-mono text-workspace-muted px-2 py-0.5 rounded bg-workspace-soft border border-workspace-outline">
+        <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono text-workspace-muted px-2 py-0.5 rounded bg-workspace-soft border border-workspace-outline">
           <Sparkles className="w-3 h-3 text-primary" />
-          <span>K-Means (4 Centroids)</span>
+          <span>K-Means</span>
         </div>
       </div>
 

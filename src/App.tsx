@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Menu, Sun, Moon } from 'lucide-react';
+import { useApp } from './context/AppContext';
 import { Sidebar } from './components/layout/Sidebar';
 import { HomeView } from './components/home/HomeView';
 import { Dropzone } from './components/compressor/Dropzone';
@@ -24,8 +26,11 @@ import { compressImage } from './lib/image-compressor';
 import { extractPaletteFromImage } from './lib/color-analyzer';
 
 export const App: React.FC = () => {
+  const { theme, toggleTheme } = useApp();
+
   // Navigation & Shell State
   const [activeTool, setActiveTool] = useState<ActiveTool>('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visualEngine] = useState<VisualEngineStatus>('hardware-accelerated');
 
   // --- Tool 1: Image Compressor State ---
@@ -125,22 +130,74 @@ export const App: React.FC = () => {
     setStripConfig((prev) => ({ ...prev, ...newCfg }));
   };
 
+  const handleScrollToPreview = () => {
+    const previewEl = document.getElementById('photobooth-preview-section');
+    if (previewEl) {
+      previewEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      const mainEl = document.querySelector('main');
+      if (mainEl) {
+        mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleScrollToTemplates = () => {
+    const templatesEl = document.getElementById('photobooth-templates-section');
+    if (templatesEl) {
+      templatesEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const handleRetakePhotobooth = () => {
     setPhotoboothPhotos([]);
     setPaletteAnalysis(null);
   };
 
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-workspace dark:bg-workspace-dark-bg text-workspace-foreground dark:text-workspace-dark-foreground transition-colors duration-200">
-      {/* Shell Dark Frosted Sidebar */}
+    <div className="h-screen w-full flex flex-col md:flex-row overflow-hidden bg-workspace dark:bg-workspace-dark-bg text-workspace-foreground dark:text-workspace-dark-foreground transition-colors duration-200">
+      {/* Mobile Top Navigation Bar (md:hidden) */}
+      <header className="md:hidden flex items-center justify-between px-3.5 py-2.5 bg-workspace-elevated dark:bg-workspace-dark-elevated border-b border-workspace-outline dark:border-workspace-dark-outline z-30 sticky top-0 shadow-xs flex-shrink-0">
+        {/* Left: Subtle Pagelist Icon Button, followed by GraphixLab */}
+        <div className="flex items-center space-x-2.5">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="w-9 h-9 rounded-lg border border-workspace-outline dark:border-workspace-dark-outline bg-workspace-surface/80 dark:bg-workspace-dark-surface/80 hover:bg-workspace-soft dark:hover:bg-workspace-dark-soft text-workspace-foreground dark:text-workspace-dark-foreground hover:border-primary/50 active:scale-95 flex items-center justify-center transition-all shadow-subtle group cursor-pointer"
+            aria-label="Daftar Halaman"
+            title="Daftar Halaman"
+          >
+            <Menu className="w-4 h-4 text-workspace-foreground dark:text-workspace-dark-foreground group-hover:text-primary transition-colors" strokeWidth={2.2} />
+          </button>
+
+          <button
+            onClick={() => setActiveTool('home')}
+            className="font-bold text-base tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground hover:text-primary transition-colors cursor-pointer select-none text-left"
+          >
+            GraphixLab
+          </button>
+        </div>
+
+        {/* Right: Theme Quick Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="w-9 h-9 rounded-lg border border-workspace-outline dark:border-workspace-dark-outline bg-workspace-surface/80 dark:bg-workspace-dark-surface/80 hover:bg-workspace-soft dark:hover:bg-workspace-dark-soft text-workspace-muted hover:text-workspace-foreground active:scale-95 flex items-center justify-center transition-all shadow-subtle"
+          aria-label="Toggle Theme"
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-primary" />}
+        </button>
+      </header>
+
+      {/* Shell Sidebar (Desktop Expandable + Mobile Drawer) */}
       <Sidebar
         activeTool={activeTool}
         onSelectTool={setActiveTool}
+        mobileOpen={mobileMenuOpen}
+        onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
       {/* Dynamic Canvas Workspace Viewport */}
-      <main className="flex-1 h-full overflow-y-auto p-4 sm:p-6 lg:p-8">
-        <div className="max-w-[1400px] mx-auto space-y-6">
+      <main className="flex-1 h-full overflow-y-auto p-3.5 sm:p-6 lg:p-8">
+        <div className="max-w-[1400px] mx-auto space-y-5 sm:space-y-6">
           {/* Halaman Utama / Home Launchpad */}
           {activeTool === 'home' && (
             <HomeView onNavigate={setActiveTool} />
@@ -148,7 +205,7 @@ export const App: React.FC = () => {
 
           {/* Tool 1: Image Compressor Studio */}
           {activeTool === 'compressor' && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Section Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
                 <div>
@@ -163,7 +220,7 @@ export const App: React.FC = () => {
 
               {/* If no image selected yet, show prominent dropzone */}
               {!imageMeta ? (
-                <div className="max-w-3xl mx-auto py-8">
+                <div className="max-w-3xl mx-auto py-4 sm:py-8">
                   <Dropzone
                     onImageSelected={handleImageSelected}
                     currentImage={imageMeta}
@@ -171,9 +228,18 @@ export const App: React.FC = () => {
                 </div>
               ) : (
                 /* Active Workspace: Controls & Split View */
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  {/* Left Column: Controls & Replace Dropzone */}
-                  <div className="lg:col-span-5 space-y-5">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+                  {/* On mobile: Compare inspector on top; on desktop on right */}
+                  <div className="lg:col-span-7 space-y-4 sm:space-y-5 order-1 lg:order-2">
+                    <CompareView
+                      originalMeta={imageMeta}
+                      result={compressionResult}
+                      isProcessing={isCompressing}
+                    />
+                  </div>
+
+                  {/* On mobile: Controls underneath; on desktop on left */}
+                  <div className="lg:col-span-5 space-y-4 sm:space-y-5 order-2 lg:order-1">
                     <CompressionControls
                       imageMeta={imageMeta}
                       settings={compressionSettings}
@@ -187,15 +253,6 @@ export const App: React.FC = () => {
                       currentImage={imageMeta}
                     />
                   </div>
-
-                  {/* Right Column: Interactive Compare View & Metrics */}
-                  <div className="lg:col-span-7 space-y-5">
-                    <CompareView
-                      originalMeta={imageMeta}
-                      result={compressionResult}
-                      isProcessing={isCompressing}
-                    />
-                  </div>
                 </div>
               )}
             </div>
@@ -203,12 +260,12 @@ export const App: React.FC = () => {
 
           {/* Tool 2: AI Photobooth Studio */}
           {activeTool === 'photobooth' && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Section Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground flex items-center gap-2">
-                    <span>AI Photobooth</span>
+                    <span>AI Photobooth Studio</span>
                     <span className="text-xs bg-primary/15 text-primary-strong border border-primary/30 px-2 py-0.5 rounded font-mono font-semibold">
                       20+ Themes
                     </span>
@@ -233,9 +290,27 @@ export const App: React.FC = () => {
                     </div>
                   ) : (
                     /* Stage 2: Photos Captured! Palette Analysis + Strip Compositor */
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                      {/* Left Column: AI Palette Swatches & Strip Template Styling */}
-                      <div className="lg:col-span-6 space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+                      {/* On mobile: Preview on top so user sees their photo strip first! On desktop: Preview on right */}
+                      <div
+                        id="photobooth-preview-section"
+                        className="lg:col-span-6 order-1 lg:order-2 scroll-mt-2 sm:scroll-mt-4"
+                      >
+                        <StripPreview
+                          photos={photoboothPhotos}
+                          config={stripConfig}
+                          palette={paletteAnalysis}
+                          onUpdateConfig={handleUpdateStripConfig}
+                          onRetake={handleRetakePhotobooth}
+                          onScrollToTemplates={handleScrollToTemplates}
+                        />
+                      </div>
+
+                      {/* On mobile: Styling & Templates underneath. On desktop: Controls on left */}
+                      <div
+                        id="photobooth-templates-section"
+                        className="lg:col-span-6 space-y-5 sm:space-y-6 order-2 lg:order-1 scroll-mt-2 sm:scroll-mt-4"
+                      >
                         <PaletteCard
                           palette={paletteAnalysis}
                           isAnalyzing={isAnalyzingPalette}
@@ -245,21 +320,13 @@ export const App: React.FC = () => {
                           config={stripConfig}
                           palette={paletteAnalysis}
                           onUpdateConfig={handleUpdateStripConfig}
-                        />
-                      </div>
-
-                      {/* Right Column: High-Res Photobooth Strip Canvas Output */}
-                      <div className="lg:col-span-6">
-                        <StripPreview
-                          photos={photoboothPhotos}
-                          config={stripConfig}
-                          onRetake={handleRetakePhotobooth}
+                          onThemeSelected={handleScrollToPreview}
                         />
                       </div>
                     </div>
                   )}
-                </div>
-              )}
+            </div>
+          )}
 
           {/* Tool 3: Image Converter Studio */}
           {activeTool === 'converter' && (

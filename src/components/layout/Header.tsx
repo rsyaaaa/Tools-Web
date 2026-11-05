@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
               <>Image Compressor Studio</>
             ) : (
               <>
-                <span>AI Photobooth</span>
+                <span>AI Photobooth Studio</span>
                 <span className="text-[10px] bg-primary/20 text-primary-warm px-1.5 py-0.5 rounded border border-primary/30 font-mono">
                   20+ THEMES
                 </span>

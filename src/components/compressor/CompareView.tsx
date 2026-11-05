@@ -142,7 +142,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
         </div>
 
         {/* Viewport Display */}
-        <div className="p-4 bg-workspace/60 min-h-[380px] flex items-center justify-center">
+        <div className="p-2 sm:p-4 bg-workspace/60 min-h-[280px] sm:min-h-[380px] flex items-center justify-center">
           {viewMode === 'split' ? (
             /* Split Curtain Slider View */
             <div
@@ -150,7 +150,7 @@ export const CompareView: React.FC<CompareViewProps> = ({
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerLeave={handlePointerUp}
-              className="relative w-full max-w-4xl h-[420px] sm:h-[480px] select-none overflow-hidden rounded-md border border-workspace-outline bg-workspace-surface shadow-subtle cursor-ew-resize"
+              className="relative w-full max-w-4xl h-[280px] sm:h-[480px] select-none overflow-hidden rounded-md border border-workspace-outline bg-workspace-surface shadow-subtle cursor-ew-resize touch-none"
             >
               {/* Layer 1: Compressed Image (Background) */}
               <img

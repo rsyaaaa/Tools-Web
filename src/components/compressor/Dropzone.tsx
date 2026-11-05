@@ -85,7 +85,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onImageSelected, currentImag
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-all ${
+        className={`relative border-2 border-dashed rounded-lg p-4 sm:p-8 text-center cursor-pointer transition-all ${
           isDragging
             ? 'border-primary bg-primary/5 scale-[1.01]'
             : 'border-workspace-outline hover:border-primary/60 bg-workspace-elevated'

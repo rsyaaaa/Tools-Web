@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import {
   Sliders,
-  Sparkles,
   Type,
   Calendar,
   Waves,
   Check,
   Palette,
+  ArrowUp,
 } from 'lucide-react';
 import { StripConfig, PaletteAnalysis } from '../../types';
 import { PHOTOBOOTH_THEMES, PhotoboothTheme } from '../../lib/photobooth-themes';
 
 interface TemplateSelectorProps {
   config: StripConfig;
-  palette: PaletteAnalysis | null;
+  palette?: PaletteAnalysis | null;
   onUpdateConfig: (newConfig: Partial<StripConfig>) => void;
+  onThemeSelected?: () => void;
 }
 
 const CATEGORIES = [
@@ -28,8 +29,9 @@ const CATEGORIES = [
 
 export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   config,
-  palette,
+  palette: _palette,
   onUpdateConfig,
+  onThemeSelected,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
 
@@ -38,16 +40,20 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       ? PHOTOBOOTH_THEMES
       : PHOTOBOOTH_THEMES.filter((t) => t.category === selectedCategory);
 
-  const applyAutoTemplate = () => {
-    if (!palette) return;
-    onUpdateConfig({
-      themeId: 'theme-ai-match',
-      patternType: undefined,
-      gradientTo: undefined,
-      frameColor: palette.suggestedFrameColor,
-      borderColor: palette.suggestedBorderColor,
-      textColor: palette.suggestedTextColor,
-    });
+  const triggerScrollToPreview = () => {
+    if (onThemeSelected) {
+      onThemeSelected();
+    } else {
+      const previewEl = document.getElementById('photobooth-preview-section');
+      if (previewEl) {
+        previewEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        const mainEl = document.querySelector('main');
+        if (mainEl) {
+          mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    }
   };
 
   const selectTheme = (tmpl: PhotoboothTheme) => {
@@ -59,28 +65,32 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       borderColor: tmpl.borderColor,
       textColor: tmpl.textColor,
     });
+    triggerScrollToPreview();
   };
 
   return (
-    <div className="bg-workspace-elevated rounded-lg border border-workspace-outline p-5 shadow-subtle space-y-5">
+    <div className="bg-workspace-elevated rounded-lg border border-workspace-outline p-3.5 sm:p-5 shadow-subtle space-y-4 sm:space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-workspace-outline pb-3">
         <div className="flex items-center space-x-2">
           <Sliders className="w-4 h-4 text-primary" />
-          <h3 className="text-sm font-bold uppercase tracking-wider text-workspace-foreground">
-            Tema Strip Photobooth (20+ Pilihan)
+          <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-workspace-foreground">
+            Tema Strip Photobooth (20+)
           </h3>
         </div>
 
-        {palette && (
+        <div className="flex items-center gap-1.5">
+          {/* Mobile shortcut to jump directly to preview */}
           <button
-            onClick={applyAutoTemplate}
-            className="text-[11px] font-mono px-2.5 py-1 rounded bg-primary/10 text-primary-strong border border-primary/30 hover:bg-primary hover:text-white transition-colors flex items-center gap-1 font-semibold"
+            type="button"
+            onClick={triggerScrollToPreview}
+            className="lg:hidden text-[10px] sm:text-[11px] font-mono px-2 py-1 rounded bg-workspace-soft border border-workspace-outline hover:border-primary text-workspace-foreground hover:text-primary transition-colors flex items-center gap-1 font-semibold cursor-pointer"
+            title="Lihat Hasil Preview di Atas"
           >
-            <Sparkles className="w-3 h-3" />
-            <span>Apply AI Match</span>
+            <ArrowUp className="w-3 h-3 text-primary" />
+            <span>Hasil</span>
           </button>
-        )}
+        </div>
       </div>
 
       {/* Category Filter Tabs */}
@@ -96,7 +106,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 ${
+              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 ${
                 isActive
                   ? 'bg-primary text-white shadow-xs'
                   : 'bg-workspace-soft text-workspace-muted hover:text-workspace-foreground border border-workspace-outline'
@@ -104,7 +114,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             >
               <span>{cat}</span>
               <span
-                className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                className={`text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                   isActive ? 'bg-white/25 text-white' : 'bg-workspace text-workspace-muted'
                 }`}
               >
@@ -118,15 +128,15 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       {/* Illustrated Themes Grid (20+ Themes) */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs text-workspace-muted">
-          <span className="font-semibold uppercase tracking-wider">
-            Pilih Tema Bergambar ({filteredThemes.length} Tema)
+          <span className="font-semibold uppercase tracking-wider text-[11px] sm:text-xs">
+            Pilih Tema ({filteredThemes.length} Pilihan)
           </span>
-          <span className="text-[11px] font-mono">
-            {config.themeId ? `Tema Aktif: ${PHOTOBOOTH_THEMES.find(t => t.id === config.themeId)?.name || 'Kustom'}` : 'Default'}
+          <span className="text-[10px] sm:text-[11px] font-mono truncate max-w-[140px] text-right">
+            {config.themeId ? `${PHOTOBOOTH_THEMES.find(t => t.id === config.themeId)?.name || 'Kustom'}` : 'Default'}
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[340px] overflow-y-auto pr-1.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5 max-h-[290px] sm:max-h-[340px] overflow-y-auto pr-1">
           {filteredThemes.map((tmpl) => {
             const isSelected =
               config.themeId === tmpl.id ||

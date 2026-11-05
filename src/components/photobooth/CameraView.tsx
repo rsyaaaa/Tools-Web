@@ -289,23 +289,44 @@ export const CameraView: React.FC<CameraViewProps> = ({
   return (
     <div className="bg-workspace-elevated rounded-lg border border-workspace-outline shadow-subtle overflow-hidden">
       {/* Top Controller Bar */}
-      <div className="px-4 py-3 border-b border-workspace-outline flex items-center justify-between bg-workspace-soft/50">
-        <div className="flex items-center space-x-2">
-          <Camera className="w-4 h-4 text-primary" />
-          <span className="text-xs font-bold uppercase tracking-wider text-workspace-foreground">
-            Live Viewfinder & Shutter
-          </span>
+      <div className="px-3 sm:px-4 py-2.5 sm:py-3 border-b border-workspace-outline flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 bg-workspace-soft/50">
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div className="flex items-center space-x-2">
+            <Camera className="w-4 h-4 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-workspace-foreground">
+              Live Viewfinder
+            </span>
+          </div>
+
+          {/* Quick Sound & Camera Flip for Mobile */}
+          <div className="flex items-center space-x-1.5 sm:hidden">
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              title={soundEnabled ? 'Matikan suara' : 'Aktifkan suara'}
+              className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground"
+            >
+              {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-primary" /> : <VolumeX className="w-3.5 h-3.5" />}
+            </button>
+            <button
+              onClick={toggleCameraFacing}
+              disabled={!isCameraActive || isCapturingSequence}
+              title="Ganti Kamera Depan / Belakang"
+              className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground disabled:opacity-40"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
           {/* Target Shot Count Selector (1, 2, 3, 4) */}
-          <div className="flex items-center bg-workspace rounded border border-workspace-outline p-0.5 text-xs font-mono">
+          <div className="grid grid-cols-4 sm:flex items-center bg-workspace rounded border border-workspace-outline p-0.5 text-xs font-mono w-full sm:w-auto">
             {([1, 2, 3, 4] as const).map((count) => (
               <button
                 key={count}
                 onClick={() => onTargetCountChange(count)}
                 disabled={isCapturingSequence}
-                className={`px-2 py-1 rounded transition-colors text-[11px] sm:text-xs ${
+                className={`px-2 py-1.5 sm:py-1 rounded transition-colors text-center text-[11px] sm:text-xs ${
                   targetCount === count
                     ? 'bg-primary text-white font-bold shadow-xs'
                     : 'text-workspace-muted hover:text-workspace-foreground'
@@ -316,29 +337,30 @@ export const CameraView: React.FC<CameraViewProps> = ({
             ))}
           </div>
 
-          {/* Sound Toggle */}
-          <button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            title={soundEnabled ? 'Matikan suara' : 'Aktifkan suara'}
-            className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground"
-          >
-            {soundEnabled ? <Volume2 className="w-4 h-4 text-primary" /> : <VolumeX className="w-4 h-4" />}
-          </button>
+          {/* Sound & Switch Camera Button on Desktop */}
+          <div className="hidden sm:flex items-center space-x-1.5">
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              title={soundEnabled ? 'Matikan suara' : 'Aktifkan suara'}
+              className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground"
+            >
+              {soundEnabled ? <Volume2 className="w-4 h-4 text-primary" /> : <VolumeX className="w-4 h-4" />}
+            </button>
 
-          {/* Switch Camera Button */}
-          <button
-            onClick={toggleCameraFacing}
-            disabled={!isCameraActive || isCapturingSequence}
-            title="Ganti Kamera Depan / Belakang"
-            className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground disabled:opacity-40"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
+            <button
+              onClick={toggleCameraFacing}
+              disabled={!isCameraActive || isCapturingSequence}
+              title="Ganti Kamera Depan / Belakang"
+              className="p-1.5 rounded border border-workspace-outline bg-workspace text-workspace-muted hover:text-workspace-foreground disabled:opacity-40"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Viewfinder Screen */}
-      <div className="relative aspect-[4/3] max-h-[460px] bg-black flex items-center justify-center overflow-hidden">
+      <div className="relative aspect-[4/3] max-h-[340px] sm:max-h-[460px] bg-black flex items-center justify-center overflow-hidden">
         {/* Flash Overlay */}
         <div
           className={`absolute inset-0 bg-white z-40 pointer-events-none transition-opacity duration-150 ${
@@ -419,7 +441,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
       </div>
 
       {/* Bottom Shutter & Upload Actions */}
-      <div className="p-4 bg-workspace-surface flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-workspace-outline">
+      <div className="p-3 sm:p-4 bg-workspace-surface flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-3 border-t border-workspace-outline">
         {/* Upload Fallback Input */}
         <input
           ref={fileInputRef}
@@ -430,28 +452,29 @@ export const CameraView: React.FC<CameraViewProps> = ({
           className="hidden"
         />
 
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isCapturingSequence}
-          className="w-full sm:w-auto px-4 py-2.5 rounded border border-workspace-outline bg-workspace-elevated hover:bg-workspace-soft text-workspace-foreground text-xs font-medium flex items-center justify-center space-x-2 transition-colors disabled:opacity-40"
-        >
-          <Upload className="w-4 h-4 text-primary" />
-          <span>
-            {t('uploadPhotos')} ({targetCount} {targetCount === 1 ? 'File' : 'Files'})
-          </span>
-        </button>
-
-        {/* Main Big Shutter Button */}
+        {/* Main Big Shutter Button (On mobile: top priority touch button) */}
         <button
           onClick={startMultiShot}
           disabled={!isCameraActive || isCapturingSequence}
-          className="w-full sm:w-auto flex-1 max-w-sm h-12 bg-primary hover:bg-primary-strong active:bg-primary-focus text-white font-bold text-xs uppercase tracking-wider rounded transition-all flex items-center justify-center space-x-2 shadow-raised disabled:opacity-40 disabled:cursor-not-allowed group"
+          className="w-full sm:flex-1 max-w-none sm:max-w-sm h-12 bg-primary hover:bg-primary-strong active:bg-primary-focus text-white font-bold text-xs uppercase tracking-wider rounded transition-all flex items-center justify-center space-x-2 shadow-raised disabled:opacity-40 disabled:cursor-not-allowed group order-1 sm:order-2"
         >
           <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
           <span>
             {isCapturingSequence
               ? `Capturing ${currentShotIndex + 1}/${targetCount}...`
               : `${t('startPhotoboothSession')} (${targetCount} ${targetCount === 1 ? 'Shot' : 'Shots'})`}
+          </span>
+        </button>
+
+        {/* Secondary Upload Button */}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isCapturingSequence}
+          className="w-full sm:w-auto px-4 py-2.5 rounded border border-workspace-outline bg-workspace-elevated hover:bg-workspace-soft text-workspace-foreground text-xs font-medium flex items-center justify-center space-x-2 transition-colors disabled:opacity-40 order-2 sm:order-1"
+        >
+          <Upload className="w-4 h-4 text-primary" />
+          <span>
+            {t('uploadPhotos')} ({targetCount} {targetCount === 1 ? 'File' : 'Files'})
           </span>
         </button>
       </div>
