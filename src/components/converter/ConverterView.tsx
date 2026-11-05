@@ -7,9 +7,6 @@ import {
   FileCheck,
   CheckCircle2,
   AlertCircle,
-  Wand2,
-  Cpu,
-  ShieldCheck,
   ArrowRight,
   Layers,
   FileText,
@@ -26,7 +23,7 @@ import { decodeHeicIfSupported } from '../../lib/format-encoders';
 import { formatBytes, loadImage } from '../../lib/image-compressor';
 
 interface ConverterViewProps {
-  visualEngine: VisualEngineStatus;
+  visualEngine?: VisualEngineStatus;
 }
 
 const AVAILABLE_FORMATS: {
@@ -48,7 +45,7 @@ const AVAILABLE_FORMATS: {
     { format: 'application/postscript', label: 'EPS', ext: '.eps', desc: 'Encapsulated PostScript', category: 'Vector & Doc' },
   ];
 
-export const ConverterView: React.FC<ConverterViewProps> = ({ visualEngine }) => {
+export const ConverterView: React.FC<ConverterViewProps> = () => {
   const [items, setItems] = useState<ConvertTaskItem[]>([]);
   const [globalTargetFormat, setGlobalTargetFormat] = useState<ConvertTargetFormat>('image/png');
   const [useJpegExtension, setUseJpegExtension] = useState<boolean>(false);
@@ -260,103 +257,24 @@ export const ConverterView: React.FC<ConverterViewProps> = ({ visualEngine }) =>
       setItems((prev) => prev.filter((x) => x.id !== id));
     };
 
-    // Load demo samples
-    const loadDemoConverterImages = () => {
-      const canvas1 = document.createElement('canvas');
-      canvas1.width = 600;
-      canvas1.height = 600;
-      const ctx1 = canvas1.getContext('2d');
-      if (ctx1) {
-        ctx1.clearRect(0, 0, 600, 600);
-        ctx1.fillStyle = '#FE6E00';
-        ctx1.beginPath();
-        ctx1.arc(300, 300, 200, 0, Math.PI * 2);
-        ctx1.fill();
-
-        ctx1.fillStyle = '#FFFFFF';
-        ctx1.font = 'bold 44px ui-sans-serif, system-ui';
-        ctx1.textAlign = 'center';
-        ctx1.fillText('LOGO ALPHA', 300, 290);
-        ctx1.font = '20px ui-mono';
-        ctx1.fillText('PNG TRANSPARENT', 300, 335);
-      }
-
-      const canvas2 = document.createElement('canvas');
-      canvas2.width = 1200;
-      canvas2.height = 800;
-      const ctx2 = canvas2.getContext('2d');
-      if (ctx2) {
-        const grad = ctx2.createLinearGradient(0, 0, 1200, 800);
-        grad.addColorStop(0, '#0F172A');
-        grad.addColorStop(0.5, '#423D38');
-        grad.addColorStop(1, '#FE6E00');
-        ctx2.fillStyle = grad;
-        ctx2.fillRect(0, 0, 1200, 800);
-
-        ctx2.fillStyle = '#FFFFFF';
-        ctx2.font = 'bold 48px ui-sans-serif, system-ui';
-        ctx2.fillText('RAW SCENE MATRIX', 80, 390);
-        ctx2.font = '20px ui-mono';
-        ctx2.fillText('1200x800 RGB COMPOSITION FOR MULTI-FORMAT TEST', 80, 435);
-      }
-
-      canvas1.toBlob((blob1) => {
-        if (!blob1) return;
-        const file1 = new File([blob1], 'sample-app-logo.png', { type: 'image/png' });
-
-        canvas2.toBlob((blob2) => {
-          if (!blob2) return;
-          const file2 = new File([blob2], 'sample-wallpaper.jpg', { type: 'image/jpeg' });
-          handleFiles([file1, file2]);
-        }, 'image/jpeg', 0.95);
-      }, 'image/png');
-    };
-
     const completedCount = items.filter((it) => it.status === 'completed').length;
     const requiresQuality = globalTargetFormat === 'image/jpeg' || globalTargetFormat === 'image/webp';
     const requiresBg = globalTargetFormat === 'image/jpeg' || globalTargetFormat === 'image/bmp';
 
     return (
       <div className="space-y-6">
-        {/* Section Header with Telemetry Badges */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline pb-4">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-workspace-outline dark:border-workspace-dark-outline pb-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-workspace-foreground dark:text-workspace-dark-foreground flex items-center gap-2">
               <span>Image Converter Studio</span>
               <span className="text-xs bg-primary/15 text-primary-strong border border-primary/30 px-2 py-0.5 rounded font-mono font-semibold">
                 11+ FORMATS
               </span>
             </h2>
-            <p className="text-xs sm:text-sm text-workspace-muted mt-0.5">
+            <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted mt-0.5">
               Konversi universal: JPEG, JPG, PNG, GIF, BMP, TIFF/TIF, HEIC/HEIF, ICO, SVG, EPS, dan PDF 100% di browser.
             </p>
-          </div>
-
-          <div className="flex items-center flex-wrap gap-2.5">
-            {/* Visual Engine Status Badge */}
-            <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft border border-workspace-outline text-workspace-foreground">
-              <Cpu className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[11px] font-mono uppercase tracking-wide">
-                {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-              </span>
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-            </div>
-
-            {/* Security / 100% Client-Side Pill */}
-            <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>100% Client-Side</span>
-            </div>
-
-            {items.length === 0 && (
-              <button
-                onClick={loadDemoConverterImages}
-                className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-              >
-                <Wand2 className="w-3.5 h-3.5" />
-                <span>Muat Contoh Citra Uji</span>
-              </button>
-            )}
           </div>
         </div>
 

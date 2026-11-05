@@ -10,7 +10,6 @@ import { TemplateSelector } from './components/photobooth/TemplateSelector';
 import { StripPreview } from './components/photobooth/StripPreview';
 import { ConverterView } from './components/converter/ConverterView';
 import { SettingsModal } from './components/settings/SettingsModal';
-import { useApp } from './context/AppContext';
 import {
   ActiveTool,
   VisualEngineStatus,
@@ -23,11 +22,8 @@ import {
 } from './types';
 import { compressImage } from './lib/image-compressor';
 import { extractPaletteFromImage } from './lib/color-analyzer';
-import { Wand2, Cpu, ShieldCheck } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const { t } = useApp();
-
   // Navigation & Shell State
   const [activeTool, setActiveTool] = useState<ActiveTool>('home');
   const [visualEngine] = useState<VisualEngineStatus>('hardware-accelerated');
@@ -80,58 +76,6 @@ export const App: React.FC = () => {
 
   const handleUpdateSettings = (newSettings: Partial<CompressionSettings>) => {
     setCompressionSettings((prev) => ({ ...prev, ...newSettings }));
-  };
-
-  // Helper: Load a high quality demo canvas image for Image Compressor testing
-  const loadDemoCompressorImage = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1600;
-    canvas.height = 1000;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Draw rich gradient & test graphics
-    const grad = ctx.createLinearGradient(0, 0, 1600, 1000);
-    grad.addColorStop(0, '#FE6E00');
-    grad.addColorStop(0.5, '#423D38');
-    grad.addColorStop(1, '#0F172A');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 1600, 1000);
-
-    // Decorative shapes
-    for (let i = 0; i < 20; i++) {
-      ctx.fillStyle = `rgba(255, 255, 255, ${0.05 + (i % 5) * 0.05})`;
-      ctx.beginPath();
-      ctx.arc(
-        (i * 120 + 80) % 1600,
-        ((i * 180 + 100) % 800) + 100,
-        60 + (i % 4) * 30,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-    }
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 56px ui-sans-serif, system-ui';
-    ctx.fillText('GRAPHIXLAB STUDIO SAMPLE', 100, 480);
-    ctx.font = '24px ui-monospace';
-    ctx.fillText('1600x1000 RAW BUFFER MATRIX · CLIENT QUANTIZATION TEST', 100, 540);
-
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const file = new File([blob], 'graphixlab-sample-scene.jpg', { type: 'image/jpeg' });
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.98);
-      handleImageSelected({
-        file,
-        name: file.name,
-        originalSize: blob.size,
-        originalWidth: 1600,
-        originalHeight: 1000,
-        dataUrl,
-        aspectRatio: 1600 / 1000,
-      });
-    }, 'image/jpeg', 0.98);
   };
 
   // --- Tool 2: AI Palette Photobooth State ---
@@ -214,33 +158,6 @@ export const App: React.FC = () => {
                   <p className="text-xs sm:text-sm text-workspace-muted dark:text-workspace-dark-muted mt-0.5">
                     Client-side lossless and quantized image optimization with real-time curtain split inspector.
                   </p>
-                </div>
-
-                <div className="flex items-center flex-wrap gap-2.5">
-                  {/* Visual Engine Status Badge */}
-                  <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-workspace-soft dark:bg-workspace-dark-soft border border-workspace-outline dark:border-workspace-dark-outline text-workspace-foreground dark:text-workspace-dark-foreground">
-                    <Cpu className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-[11px] font-mono uppercase tracking-wide">
-                      {visualEngine === 'hardware-accelerated' ? 'Engine: WebGL/2D' : 'Engine: Canvas 2D'}
-                    </span>
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-success ml-0.5" />
-                  </div>
-
-                  {/* Security / 100% Client-Side Pill */}
-                  <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-status-prod-bg text-status-prod-fg border border-status-success/30 font-sans text-[11px] font-medium">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>100% Client-Side</span>
-                  </div>
-
-                  {!imageMeta && (
-                    <button
-                      onClick={loadDemoCompressorImage}
-                      className="px-3.5 py-2 rounded border border-primary/40 bg-primary/10 hover:bg-primary hover:text-white text-primary-strong dark:text-primary-warm text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-                    >
-                      <Wand2 className="w-3.5 h-3.5" />
-                      <span>{t('loadSampleCompressor')}</span>
-                    </button>
-                  )}
                 </div>
               </div>
 

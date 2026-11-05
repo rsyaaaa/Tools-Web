@@ -47,12 +47,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="w-8 h-8 rounded-md bg-gradient-to-br from-primary to-primary-strong flex items-center justify-center shadow-raised flex-shrink-0 group-hover:scale-105 transition-transform">
                   <Layers className="w-4 h-4 text-white" />
                 </div>
-                <div className="flex flex-col min-w-0">
+                <div className="flex items-center min-w-0">
                   <span className="font-bold text-sm tracking-tight text-white leading-tight group-hover:text-primary-warm transition-colors truncate">
                     GraphixLab
-                  </span>
-                  <span className="text-[10px] font-mono tracking-wider text-white/50 uppercase">
-                    Evreghen Shell
                   </span>
                 </div>
               </div>
@@ -71,12 +68,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Navigation Section */}
           <div className="p-2 space-y-1 mt-2">
-            {isHovered && (
-              <div className="px-3 py-1.5 text-[10px] font-mono tracking-widest text-white/40 uppercase">
-                {t('coreModules')}
-              </div>
-            )}
-
             {/* Tool 1: AI Palette Photobooth */}
             <button
               onClick={() => handleToolClick('photobooth')}

@@ -5,7 +5,7 @@ export const translations = {
     // Header & Brand
     workspace: 'WORKSPACE //',
     freeClientSideBadge: '100% Free, 100% Client Side',
-    privacyFooter: 'PRIVASI TERJAMIN · 100% PEMROSESAN CLIENT-SIDE · TANPA PERSISTENSI SERVER',
+    privacyFooter: 'PRIVASI TERJAMIN · 100% PROSES LANGSUNG DI BROWSER ANDA · TANPA TERHUBUNG KE DATABASE',
     
     // Navigation / Modules
     homeTitle: 'Halaman Utama',
@@ -104,7 +104,7 @@ export const translations = {
     // Header & Brand
     workspace: 'WORKSPACE //',
     freeClientSideBadge: '100% Free, 100% Client Side',
-    privacyFooter: 'PRIVACY ASSURED · 100% CLIENT-SIDE EXECUTION · ZERO SERVER PERSISTENCE',
+    privacyFooter: 'PRIVACY ASSURED · 100% PROCESSED DIRECTLY IN YOUR BROWSER · NO DATABASE CONNECTION',
 
     // Navigation / Modules
     homeTitle: 'Home',
